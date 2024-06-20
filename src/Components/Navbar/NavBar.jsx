@@ -1,19 +1,28 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell } from '@fortawesome/free-solid-svg-icons';
+import { faBell } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 const navListItems = (
   <>
     <li>
-      <a href="#" className="font-semibold text-lg">Home</a>
+      <a href="#" className="font-semibold text-lg">
+        Home
+      </a>
     </li>
     <li>
-      <a href="#" className="font-semibold text-lg">About</a>
+      <a href="#" className="font-semibold text-lg">
+        About
+      </a>
     </li>
     <li>
-      <a href="#" className="font-semibold  text-lg">Notice</a>
+      <a href="#" className="font-semibold  text-lg">
+        Notice
+      </a>
     </li>
     <li>
-      <a href="#" className="font-semibold text-lg">Events</a>
+      <a href="#" className="font-semibold text-lg">
+        Events
+      </a>
     </li>
   </>
 );
@@ -46,21 +55,29 @@ const NavBar = () => {
             {navListItems}
           </ul>
         </div>
-        <a className=" flex flex-col justify-center items-center mx-10"> <div className="text-5xl text-sky-600 font-bold ">L U</div> <div className="text-xl font-semibold ">P U L S E</div> </a>
+        {/* lupulse */}
+        <Link className="p-0 lg:p-2 md:p-2 flex flex-col justify-center items-center mx-10 mt-5 lg:mt-0">
+          <div className="text-2xl lg:text-5xl md:text-5xl text-sky-600 font-bold">
+            L U
+          </div>
+          <div className="text-[10px] lg:text-xl md:text-xl font-semibold px-">
+            P U L S E
+          </div>
+        </Link>
       </div>
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
-          {navListItems}
-        </ul>
+        <ul className="menu menu-horizontal px-1">{navListItems}</ul>
       </div>
       <div className="navbar-end">
-
-        <a className="btn btn-ghost font-semibold mx-2"> <FontAwesomeIcon icon={faBell} /> </a>
+        <a className="btn btn-ghost font-semibold mx-2">
+          {" "}
+          <FontAwesomeIcon icon={faBell} />{" "}
+        </a>
         <a className="btn btn-ghost font-semibold mx-2">Login</a>
         <a className="btn bg-black text-white">Sign up</a>
       </div>
     </div>
   );
-}
+};
 
 export default NavBar;
