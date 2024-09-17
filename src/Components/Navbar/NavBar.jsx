@@ -10,11 +10,6 @@ const navListItems = (
       </a>
     </li>
     <li>
-      <a href="#" className="font-semibold text-lg">
-        About
-      </a>
-    </li>
-    <li>
       <a href="#" className="font-semibold  text-lg">
         Notice
       </a>
@@ -22,6 +17,11 @@ const navListItems = (
     <li>
       <a href="#" className="font-semibold text-lg">
         Events
+      </a>
+    </li>
+    <li>
+      <a href="#" className="font-semibold text-lg">
+        About
       </a>
     </li>
   </>
@@ -56,7 +56,7 @@ const NavBar = () => {
           </ul>
         </div>
         {/* lupulse */}
-        <Link className="p-0 lg:p-2 md:p-2 flex flex-col justify-center items-center mx-10 mt-5 lg:mt-0">
+        <Link className="p-0 lg:p- md:p-2 flex flex-col justify-center items-center mx-10 mt-5 lg:mt-0">
           <div className="text-2xl lg:text-5xl md:text-5xl text-sky-600 font-bold">
             L U
           </div>
