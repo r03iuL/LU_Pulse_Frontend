@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
+import img from "../../assets/logo-white.png";
 
 function Footer() {
   return (
-    <footer className="footer py-10 px-20 bg-base-200 text-base-content ">
+    <footer className="footer py-14 px-20 bg-blue-100 text-base-content ">
       <div>
         <Link className="p-0 lg:p-2 md:p-2 flex flex-col justify-center items-center mx-10 mt-5 lg:mt-0">
           <div className="text-2xl lg:text-5xl md:text-5xl text-sky-600 font-bold">
@@ -12,6 +13,14 @@ function Footer() {
             P U L S E
           </div>
           <div className="text-center font-bold py-5">
+            Get LU updates in a pulse!
+          </div>
+        </Link>
+      </div>
+      <div>
+        <Link className="p-0 lg:p-2 md:p-2 flex flex-col justify-center items-center mx-10 mt-5 lg:mt-0">
+          <img src={img} alt="" className="h-24" />
+          <div className="text-center font-bold ">
             Leading University <br />
             Ragibnagar, South Surma, Sylhet-3112{" "}
           </div>

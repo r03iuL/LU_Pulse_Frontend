@@ -19,9 +19,9 @@ function Future() {
             Our university provides various facilities for the students to
             improve the quality of studies!
           </p>
-          <div className="grid  grid-cols-1 lg:grid-cols-2 gap-6 mt-2">
+          <div className="grid  grid-cols-1 lg:grid-cols-2 gap-4 mt-2">
             {/* Square 1 - Academics */}
-            <div className="w-38 h-44 bg-slate-200 rounded-md p-4 lg:mt-10">
+            <div className="w-38 h-44 bg-slate-200 rounded-md px-8 py-2 lg:mt-10">
               <h1 className="text-center font-bold py-2">Academics</h1>
               <ul className="list-disc list-inside text-sm font-semibold">
                 <li>Personalized Tutoring</li>
@@ -31,7 +31,7 @@ function Future() {
             </div>
 
             {/* Square 2 - Library */}
-            <div className="w-38 h-44 bg-slate-300 rounded-md p-4 ">
+            <div className="w-38 h-44 bg-slate-300 rounded-md px-8 py-2 ">
               <h1 className="text-center font-bold py-2">Library</h1>
               <ul className="list-disc list-inside text-sm font-semibold">
                 <li>Digital Resources</li>
@@ -41,7 +41,7 @@ function Future() {
             </div>
 
             {/* Square 3 - Sports Complex */}
-            <div className="w-38 h-44 bg-slate-100 rounded-md px-8 py-4 lg:mt-10">
+            <div className="w-38 h-44 bg-blue-100 rounded-md px-8 py-2 lg:mt-10">
               <h1 className="text-center font-bold py-2">Sports Complex</h1>
               <ul className="list-disc list-inside text-sm font-semibold">
                 <li>Gym Facilities</li>
@@ -51,7 +51,7 @@ function Future() {
             </div>
 
             {/* Square 4 - Student Center */}
-            <div className="w-38 h-44 bg-slate-200 rounded-md px-8 py-4">
+            <div className="w-38 h-44 bg-slate-200 rounded-md px-8 py-2">
               <h1 className="text-center font-bold py-2">Student Center</h1>
               <ul className="list-disc list-inside text-sm font-semibold">
                 <li>Recreational Areas</li>

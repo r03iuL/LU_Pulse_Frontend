@@ -1,15 +1,35 @@
 import { createBrowserRouter } from "react-router-dom";
-import MainLayout from "./../Layouts/MainLasyout";
+import MainLayout from "./../Layouts/MainLasyout"; // Fix typo from MainLasyout to MainLayout
 import Home from './../Pages/Home/Home';
+import About from './../Pages/About/About';
+import Events from './../Pages/Events/Events';
+import Signup from "./../Pages/Signup/Signup";
+import Login from "./../Pages/Login/Login";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout></MainLayout>,
+    element: <MainLayout />, // Main layout that wraps the pages
     children: [
       {
-        path: "/",
-        element:<Home></Home>,
+        path: "/", // Root path that shows the Home page
+        element: <Home />,
+      },
+      {
+        path: "about", // Fix the About Us route to be a direct child of MainLayout
+        element: <About />,
+      },
+      {
+        path: "events", // Fix the About Us route to be a direct child of MainLayout
+        element: <Events />,
+      },
+      {
+        path: "signup", // Fix the About Us route to be a direct child of MainLayout
+        element: <Signup/>,
+      },
+      {
+        path: "login", // Fix the About Us route to be a direct child of MainLayout
+        element: <Login/>,
       },
     ],
   },

@@ -1,13 +1,15 @@
-import Banner from "../../Components/Homepage/Banner"
-import Futures from './../../Components/Homepage/Futures';
-
+import Banner from "../../Components/Homepage/Banner";
+import Futures from "./../../Components/Homepage/Futures";
 
 function Home() {
-  return (<>
-    <Banner></Banner>
-    <Futures></Futures>
-  </>
-  )
+  return (
+    <>
+      <div className="bg-blue-50">
+        <Banner></Banner>
+        <Futures></Futures>
+      </div>
+    </>
+  );
 }
 
-export default Home
+export default Home;

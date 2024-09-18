@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const navListItems = (
   <>
     <li>
-      <a href="#" className="font-semibold text-lg">
+      <a href="/" className="font-semibold text-lg">
         Home
       </a>
     </li>
@@ -15,12 +15,12 @@ const navListItems = (
       </a>
     </li>
     <li>
-      <a href="#" className="font-semibold text-lg">
+      <a href="/events" className="font-semibold text-lg">
         Events
       </a>
     </li>
     <li>
-      <a href="#" className="font-semibold text-lg">
+      <a href="/about" className="font-semibold text-lg">
         About
       </a>
     </li>
@@ -29,7 +29,7 @@ const navListItems = (
 
 const NavBar = () => {
   return (
-    <div className="navbar bg-base-100">
+    <div className="navbar bg-blue-50">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -73,8 +73,8 @@ const NavBar = () => {
           {" "}
           <FontAwesomeIcon icon={faBell} />{" "}
         </a>
-        <a className="btn btn-ghost font-semibold mx-2">Login</a>
-        <a className="btn bg-black text-white">Sign up</a>
+        <Link to="/login" className="btn btn-ghost font-semibold mx-2">Login</Link>
+        <Link to="/signup"className="btn bg-black text-white">Sign up</Link>
       </div>
     </div>
   );
