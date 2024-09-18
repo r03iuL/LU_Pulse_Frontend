@@ -29,13 +29,6 @@ const Events = () => {
         venue: "University Campus",
         details: "Guided tour of the university campus.",
       },
-      {
-        name: "Campus Tour",
-        date: "2024-09-18",
-        time: "12:00 PM",
-        venue: "University Campus",
-        details: "Guided tour of the university campus.",
-      },
     ],
     "2024-09-20": [
       {
@@ -65,33 +58,34 @@ const Events = () => {
   const eventList = events[selectedDate] || [];
 
   return (
-    <div className="bg-slate-100">
-      <div className="flex flex-col md:flex-row min-h-screen max-w-[90%] px-20 py-10 mx-auto">
+    <div className="bg-slate-200 min-h-screen">
+      <h2 className="text-3xl pt-6 font-semibold text-center text-cyan-600">
+        Upcoming Events
+      </h2>
+      <div className="flex flex-col lg:flex-row max-w-[90%] mx-auto px-4 lg:px-20 py-6 lg:py-10 justify-center gap-6">
         {/* Calendar Section */}
-        <div className="w-full md:w-1/3 p-5">
-          <h2 className="text-2xl font-semibold mb-4 text-center">Calendar</h2>
+        <div className="w-full lg:w-1/3 mb-6 lg:mb-0 mx-auto">
           <Calendar
             onChange={handleDateChange}
             value={date}
-            className="shadow-xl rounded-xl border-0 p-6"
+            className="shadow-xl rounded-xl border-0 p-4 lg:p-6"
           />
         </div>
 
         {/* Event Viewer Section */}
-        <div className="w-full md:w-2/3 p-5 bg-white shadow-xl ml-0 md:ml-4 rounded-xl p-10">
-          <h2 className="text-2xl font-semibold mb-4 text-center">Events</h2>
+        <div className="w-full lg:w-2/3 bg-white shadow-xl rounded-xl p-4 lg:p-6">
           {eventList.length > 0 ? (
             <ul className="list-none">
               {eventList.map((event, index) => (
-                <li key={index} className="mb-6 p-4 border-b-2">
-                  <h3 className="text-xl font-bold">{event.name}</h3>
-                  <div className="flex justify-between items-center mt-2 font-bold w-3/4 py-2">
-                    <span className="text-gray-600">Date: {event.date}</span>
-                    <span className="text-gray-600">Time: {event.time}</span>
-                    <span className="text-gray-600">Venue: {event.venue}</span>
+                <li key={index} className="mb-6 p-4 border-b border-gray-300">
+                  <h3 className="text-lg lg:text-xl font-bold">{event.name}</h3>
+                  <div className="text-sm lg:text-base text-gray-500 mt-2">
+                    <p>Date: {event.date}</p>
+                    <p>Time: {event.time}</p>
+                    <p>Venue: {event.venue}</p>
                   </div>
-                  <div className="mt-2 bg-slate-100 p-6 rounded-md">
-                    <p className=" text-gray-800 ">{event.details}</p>
+                  <div className="mt-2 bg-slate-100 p-4 rounded-md">
+                    <p className="text-gray-800">{event.details}</p>
                   </div>
                 </li>
               ))}

@@ -85,7 +85,7 @@ const Notice = () => {
 
   return (
     <div className="bg-gray-100">
-      <div className="min-h-screen max-w-[90%] px-20 py-10 mx-auto">
+      <div className="min-h-screen max-w-7xl px-4 sm:px-6 lg:px-20 py-10 mx-auto">
         {/* Search Bar */}
         <div className="mb-6">
           <div className="relative">
@@ -102,9 +102,9 @@ const Notice = () => {
           </div>
         </div>
 
-        <div className="flex">
+        <div className="flex flex-col lg:flex-row">
           {/* Left Sidebar for Notice Categories */}
-          <div className="w-full md:w-1/4 p-4 bg-white shadow-lg rounded-xl">
+          <div className="w-full lg:w-1/4 p-4 bg-white shadow-lg rounded-xl mb-6 lg:mb-0 lg:mr-6">
             <h3 className="text-xl font-semibold mb-4">Categories</h3>
             <ul className="space-y-2">
               <li
@@ -161,7 +161,7 @@ const Notice = () => {
           </div>
 
           {/* Notice List */}
-          <div className="w-full md:w-3/4 p-6 bg-white ml-6 rounded-xl shadow-lg">
+          <div className="w-full lg:w-3/4 p-6 bg-white rounded-xl shadow-lg">
             {filteredNotices.length > 0 ? (
               filteredNotices.map((notice) => (
                 <div
@@ -182,7 +182,7 @@ const Notice = () => {
                     <img
                       src={notice.image}
                       alt={notice.title}
-                      className="mt-3 w-72 h-auto max-w-xs rounded-md"
+                      className="mt-3 w-full max-w-xs h-auto rounded-md"
                     />
                   )}
                 </div>
