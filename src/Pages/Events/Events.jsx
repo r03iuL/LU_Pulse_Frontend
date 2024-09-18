@@ -65,7 +65,7 @@ const Events = () => {
   const eventList = events[selectedDate] || [];
 
   return (
-    <div className="bg-slate-200">
+    <div className="bg-slate-100">
       <div className="flex flex-col md:flex-row min-h-screen max-w-[90%] px-20 py-10 mx-auto">
         {/* Calendar Section */}
         <div className="w-full md:w-1/3 p-5">

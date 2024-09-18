@@ -1,6 +1,6 @@
 const About = () => {
   return (
-    <div className="bg-blue-50 py-10 px-10">
+    <div className="bg-slate-100 py-10 px-10">
       <div className="container mx-auto">
         <h1 className="text-3xl my-6 font-bold text-center text-cyan-600">
           About LU Pulse
