@@ -1,12 +1,12 @@
 const About = () => {
   return (
-    <div className="bg-blue-50 py-10 px-5">
+    <div className="bg-blue-50 py-10 px-10">
       <div className="container mx-auto">
-        <h1 className="text-3xl font-bold text-center text-cyan-600">
+        <h1 className="text-3xl my-6 font-bold text-center text-cyan-600">
           About LU Pulse
         </h1>
 
-        <div className="text-justify">
+        <div className="text-justify bg-white p-10 rounded-xl shadow-xl">
           <h2 className="text-2xl font-semibold my-2 text-orange-600">What is LU Pulse?</h2>
           <p className="text-lg border-t-4 border-slate-300 py-4">
             LU Pulse is a comprehensive and innovative notification system developed specifically for university students, faculty, and administrative staff. It aims to streamline communication across the campus by providing real-time updates on important notices, events, and activities. Whether it&apos;s an academic deadline, a campus event, or administrative announcements, LU Pulse ensures everyone stays informed and connected.
@@ -17,7 +17,7 @@ const About = () => {
         </div>
 
         {/* New Section: Why LU Pulse? */}
-        <div className="mt-10 text-justify">
+        <div className="mt-10 text-justify bg-white p-10 rounded-xl shadow-xl">
           <h2 className="text-2xl font-semibold my-2 text-orange-600">Why LU Pulse?</h2>
           <p className="text-lg border-t-4 border-slate-300 py-4">
             Unlike WhatsApp groups or Facebook pages, LU Pulse is tailored specifically for the needs of a university environment. While social media platforms and messaging apps are great for casual communication, they lack the structure and reliability that an official notification system provides.
@@ -32,12 +32,12 @@ const About = () => {
         </div>
 
         {/* Key Features Section */}
-        <div className="mt-6 text-justify">
+        <div className="my-10 text-justify">
           <h2 className="text-3xl font-bold text-center mb-6 text-cyan-600">
             Key Features
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 border-t-4 border-slate-300 py-6 ">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 py-6 ">
             <div className="card bg-base-100 shadow-xl p-12">
               <h3 className="text-2xl font-bold mb-3 text-orange-600 text-center">
                 Notice Updates

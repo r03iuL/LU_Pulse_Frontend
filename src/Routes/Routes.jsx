@@ -5,6 +5,8 @@ import About from './../Pages/About/About';
 import Events from './../Pages/Events/Events';
 import Signup from "./../Pages/Signup/Signup";
 import Login from "./../Pages/Login/Login";
+import Notice from "../Pages/Notice/Notice";
+import Profile from './../Pages/Profile/Profile';
 
 const router = createBrowserRouter([
   {
@@ -22,6 +24,14 @@ const router = createBrowserRouter([
       {
         path: "events", // Fix the About Us route to be a direct child of MainLayout
         element: <Events />,
+      },
+      {
+        path: "notice", // Fix the About Us route to be a direct child of MainLayout
+        element: <Notice/>,
+      },
+      {
+        path: "profile", // Fix the About Us route to be a direct child of MainLayout
+        element: <Profile/>,
       },
       {
         path: "signup", // Fix the About Us route to be a direct child of MainLayout

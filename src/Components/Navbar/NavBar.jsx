@@ -1,5 +1,5 @@
+import { faUser } from "@fortawesome/free-solid-svg-icons/faUser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
 const navListItems = (
@@ -10,8 +10,8 @@ const navListItems = (
       </a>
     </li>
     <li>
-      <a href="#" className="font-semibold  text-lg">
-        Notice
+      <a href="/notice" className="font-semibold  text-lg">
+        Notice&apos;s
       </a>
     </li>
     <li>
@@ -69,10 +69,10 @@ const NavBar = () => {
         <ul className="menu menu-horizontal px-1">{navListItems}</ul>
       </div>
       <div className="navbar-end">
-        <a className="btn btn-ghost font-semibold mx-2">
+        <Link to="/profile" className="btn btn-ghost font-semibold mx-2 p-4">
           {" "}
-          <FontAwesomeIcon icon={faBell} />{" "}
-        </a>
+          <FontAwesomeIcon icon={faUser} />{" "}
+        </Link>
         <Link to="/login" className="btn btn-ghost font-semibold mx-2">Login</Link>
         <Link to="/signup"className="btn bg-black text-white">Sign up</Link>
       </div>

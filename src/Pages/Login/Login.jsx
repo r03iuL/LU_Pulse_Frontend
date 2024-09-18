@@ -24,7 +24,7 @@ const Login = () => {
     <div className="flex items-center justify-center min-h-screen bg-gray-100 py-10">
       <div className="card w-full max-w-lg shadow-2xl bg-base-100">
         <div className="card-body">
-          <h2 className="text-2xl font-bold text-center text-primary mb-4">
+          <h2 className="text-3xl font-bold text-center text-sky-600 mb-4">
             Login
           </h2>
 
@@ -61,7 +61,7 @@ const Login = () => {
 
             {/* Submit Button */}
             <div className="form-control mt-6">
-              <button type="submit" className="btn btn-primary">
+              <button type="submit" className="btn bg-sky-600 text-white text-lg">
                 Login
               </button>
             </div>

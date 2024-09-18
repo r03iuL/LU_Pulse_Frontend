@@ -8,6 +8,7 @@ const Signup = () => {
     email: "",
     password: "",
     confirmPassword: "",
+    userType: "student", // Default to 'student'
   });
 
   const handleChange = (e) => {
@@ -23,7 +24,7 @@ const Signup = () => {
       alert("Passwords do not match!");
       return;
     }
-    // Handle form submission logic
+    // Handle form submission logic here
     console.log(formData);
   };
 
@@ -31,12 +32,11 @@ const Signup = () => {
     <div className="flex items-center justify-center min-h-screen bg-gray-100 py-10">
       <div className="card w-full max-w-lg shadow-2xl bg-base-100">
         <div className="card-body">
-          <h2 className="text-2xl font-bold text-center text-primary mb-4">
+          <h2 className="text-3xl font-bold text-center text-sky-600 mb-4">
             Signup
           </h2>
 
           <form onSubmit={handleSubmit}>
-
             {/* Full Name */}
             <div className="form-control mb-4">
               <label className="label">
@@ -82,6 +82,24 @@ const Signup = () => {
               />
             </div>
 
+            {/* User Type Dropdown */}
+            <div className="form-control mb-4">
+              <label className="label">
+                <span className="label-text">User Type</span>
+              </label>
+              <select
+                name="userType"
+                value={formData.userType}
+                onChange={handleChange}
+                className="select select-bordered"
+                required
+              >
+                <option value="student">Student</option>
+                <option value="faculty">Faculty</option>
+                <option value="staff">Staff</option>
+              </select>
+            </div>
+
             {/* Password */}
             <div className="form-control mb-4">
               <label className="label">
@@ -114,7 +132,7 @@ const Signup = () => {
 
             {/* Submit Button */}
             <div className="form-control mt-6">
-              <button type="submit" className="btn btn-primary">
+              <button type="submit" className="btn bg-sky-600 text-white text-lg">
                 Signup
               </button>
             </div>
