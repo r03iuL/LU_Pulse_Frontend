@@ -9,13 +9,22 @@ const Signup = () => {
     password: "",
     confirmPassword: "",
     userType: "student", // Default to 'student'
+    image: null, // Added image field
   });
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value, type, files } = e.target;
+    if (type === "file") {
+      setFormData({
+        ...formData,
+        [name]: files[0], // Store the file object
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
   const handleSubmit = (e) => {
@@ -127,6 +136,20 @@ const Signup = () => {
                 onChange={handleChange}
                 className="input input-bordered"
                 required
+              />
+            </div>
+
+            {/* Image Upload */}
+            <div className="form-control mb-4">
+              <label className="label">
+                <span className="label-text">Profile Picture</span>
+              </label>
+              <input
+                type="file"
+                name="image"
+                onChange={handleChange}
+                className="input"
+                accept="image/*"
               />
             </div>
 
