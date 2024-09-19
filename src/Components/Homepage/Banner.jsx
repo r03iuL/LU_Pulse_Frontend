@@ -2,7 +2,7 @@ import img from "../../assets/Banner.svg";
 
 function Banner() {
   return (
-    <div className="hero min-h-screen max-w-[90%] sm:max-w-[80%] mx-auto flex flex-col lg:flex-row items-center justify-center relative ">
+    <div className="hero min-h-screen max-w-[90%] sm:max-w-[80%] mx-auto flex flex-col lg:flex-row items-center justify-center relative">
       <div className="ciclePosition w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] bg-amber-400 rounded-full absolute z-0 top-[30%] left-[50%] transform translate-x-[-150%] translate-y-[-90%] blur-[150px] sm:blur-[290px]"></div>
       <div className="hero-content flex flex-col lg:flex-row-reverse items-center justify-center w-full relative z-10">
         <div className="relative max-w-lg lg:max-w-xl mx-5 lg:mx-10 rounded-lg overflow-hidden flex-shrink-0">
