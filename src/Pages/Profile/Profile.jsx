@@ -8,14 +8,14 @@ const Profile = () => {
     };
   
     return (
-      <div className="flex flex-col items-center justify-center  bg-gray-100">
-        <div className="bg-white shadow-lg rounded-lg w-full max-w-md p-6 border lg:my-10 border-gray-300">
+      <div className="flex flex-col items-center justify-center bg-gray-100 p-4 lg:p-10">
+        <div className="card w-full max-w-2xl shadow-2xl bg-white p-8 m-4 lg:m-0">
           {/* Profile Image */}
           <div className="flex justify-center mb-4">
             <img
               src={user.imageUrl}
               alt="Profile"
-              className="w-32 h-32 lg:w-60 lg:h-60 rounded-full border-4 border-gray-300"
+              className="w-32 h-32 lg:w-80 lg:h-80 rounded-full border-4 border-gray-300"
             />
           </div>
           

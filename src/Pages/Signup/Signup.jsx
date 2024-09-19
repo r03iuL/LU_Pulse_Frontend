@@ -27,19 +27,91 @@ const Signup = () => {
     }
   };
 
+  const validateFullName = () => {
+    if (!formData.fullName) {
+      document.getElementById("fullNameError").innerText = "Full name is required";
+      return false;
+    } else {
+      document.getElementById("fullNameError").innerText = "";
+      return true;
+    }
+  };
+
+  const validateID = () => {
+    if (!formData.id) {
+      document.getElementById("idError").innerText = "ID is required";
+      return false;
+    } else {
+      document.getElementById("idError").innerText = "";
+      return true;
+    }
+  };
+
+  const validateEmail = () => {
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@lus\.ac\.bd$/;
+    if (!formData.email) {
+      document.getElementById("emailError").innerText = "Email is required";
+      return false;
+    } else if (!emailPattern.test(formData.email)) {
+      document.getElementById("emailError").innerText = "Email must end with @lus.ac.bd";
+      return false;
+    } else {
+      document.getElementById("emailError").innerText = "";
+      return true;
+    }
+  };
+
+  const validatePassword = () => {
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/;
+    if (!formData.password) {
+      document.getElementById("passwordError").innerText = "Password is required";
+      return false;
+    } else if (!passwordPattern.test(formData.password)) {
+      document.getElementById("passwordError").innerText = "Password must be at least 6 characters long, contain 1 uppercase letter, 1 lowercase letter, and 1 number";
+      return false;
+    } else {
+      document.getElementById("passwordError").innerText = "";
+      return true;
+    }
+  };
+
+  const validateConfirmPassword = () => {
+    if (!formData.confirmPassword) {
+      document.getElementById("confirmPasswordError").innerText = "Confirm password is required";
+      return false;
+    } else if (formData.password !== formData.confirmPassword) {
+      document.getElementById("confirmPasswordError").innerText = "Passwords do not match";
+      return false;
+    } else {
+      document.getElementById("confirmPasswordError").innerText = "";
+      return true;
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
-      return;
+
+    // Run all validations
+    const isFullNameValid = validateFullName();
+    const isIDValid = validateID();
+    const isEmailValid = validateEmail();
+    const isPasswordValid = validatePassword();
+    const isConfirmPasswordValid = validateConfirmPassword();
+
+    // Check if all validations passed
+    if (isFullNameValid && isIDValid && isEmailValid && isPasswordValid && isConfirmPasswordValid) {
+      // Proceed with signup logic
+      console.log(formData);
+      alert("Signup successful!");
+    } else {
+      // Handle invalid form
+      alert("Please correct the errors in the form.");
     }
-    // Handle form submission logic here
-    console.log(formData);
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 py-10">
-      <div className="card w-full max-w-lg shadow-2xl bg-base-100">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 lg:py-10">
+      <div className="card w-full max-w-2xl shadow-2xl bg-base-100 p-2 m-4 lg:m-0">
         <div className="card-body">
           <h2 className="text-3xl font-bold text-center text-sky-600 mb-4">
             Signup
@@ -49,59 +121,61 @@ const Signup = () => {
             {/* Full Name */}
             <div className="form-control mb-4">
               <label className="label">
-                <span className="label-text">Full Name</span>
+                <span className="label-text font-bold">Full Name</span>
               </label>
               <input
                 type="text"
                 name="fullName"
                 value={formData.fullName}
                 onChange={handleChange}
-                className="input input-bordered"
-                required
+                onBlur={validateFullName} // Directly call validation
+                className="input input-bordered w-full"
               />
+              <span id="fullNameError" className="text-red-500 text-sm"></span>
             </div>
 
             {/* ID */}
             <div className="form-control mb-4">
               <label className="label">
-                <span className="label-text">ID</span>
+                <span className="label-text font-bold">ID</span>
               </label>
               <input
                 type="text"
                 name="id"
                 value={formData.id}
                 onChange={handleChange}
-                className="input input-bordered"
-                required
+                onBlur={validateID} // Directly call validation
+                className="input input-bordered w-full"
               />
+              <span id="idError" className="text-red-500 text-sm"></span>
             </div>
 
             {/* Email */}
             <div className="form-control mb-4">
               <label className="label">
-                <span className="label-text">Email</span>
+                <span className="label-text font-bold">Email</span>
               </label>
               <input
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="input input-bordered"
-                required
+                onBlur={validateEmail} // Directly call validation
+                className="input input-bordered w-full"
               />
+              <span id="emailError" className="text-red-500 text-sm"></span>
             </div>
 
             {/* User Type Dropdown */}
             <div className="form-control mb-4">
               <label className="label">
-                <span className="label-text">User Type</span>
+                <span className="label-text font-bold">User Type</span>
               </label>
               <select
                 name="userType"
                 value={formData.userType}
                 onChange={handleChange}
-                className="select select-bordered"
-                required
+                className="select select-bordered w-full"
               >
                 <option value="student">Student</option>
                 <option value="faculty">Faculty</option>
@@ -112,50 +186,55 @@ const Signup = () => {
             {/* Password */}
             <div className="form-control mb-4">
               <label className="label">
-                <span className="label-text">Password</span>
+                <span className="label-text font-bold">Password</span>
               </label>
               <input
                 type="password"
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className="input input-bordered"
-                required
+                onBlur={validatePassword} // Directly call validation
+                className="input input-bordered w-full"
               />
+              <span id="passwordError" className="text-red-500 text-sm"></span>
             </div>
 
             {/* Confirm Password */}
             <div className="form-control mb-4">
               <label className="label">
-                <span className="label-text">Confirm Password</span>
+                <span className="label-text font-bold">Confirm Password</span>
               </label>
               <input
                 type="password"
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className="input input-bordered"
-                required
+                onBlur={validateConfirmPassword} // Directly call validation
+                className="input input-bordered w-full"
               />
+              <span id="confirmPasswordError" className="text-red-500 text-sm"></span>
             </div>
 
             {/* Image Upload */}
             <div className="form-control mb-4">
               <label className="label">
-                <span className="label-text">Profile Picture</span>
+                <span className="label-text font-bold">Profile Picture</span>
               </label>
               <input
                 type="file"
                 name="image"
                 onChange={handleChange}
-                className="input"
+                className="input w-full"
                 accept="image/*"
               />
             </div>
 
             {/* Submit Button */}
             <div className="form-control mt-6">
-              <button type="submit" className="btn bg-sky-600 text-white text-lg">
+              <button
+                type="submit"
+                className="btn bg-sky-600 text-white text-lg w-full"
+              >
                 Signup
               </button>
             </div>
@@ -163,9 +242,9 @@ const Signup = () => {
 
           {/* Login Redirect */}
           <div className="text-center mt-4">
-            <p className="text-sm">
+            <p>
               Already have an account?{" "}
-              <Link to="/login" className="text-primary font-semibold">
+              <Link to="/login" className="text-sky-600 hover:underline">
                 Login
               </Link>
             </p>
