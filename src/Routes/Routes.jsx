@@ -1,12 +1,14 @@
 import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "./../Layouts/MainLasyout"; // Fix typo from MainLasyout to MainLayout
-import Home from './../Pages/Home/Home';
-import About from './../Pages/About/About';
-import Events from './../Pages/Events/Events';
+import Home from "./../Pages/Home/Home";
+import About from "./../Pages/About/About";
+import Events from "./../Pages/Events/Events";
 import Signup from "./../Pages/Signup/Signup";
 import Login from "./../Pages/Login/Login";
 import Notice from "../Pages/Notice/Notice";
-import Profile from './../Pages/Profile/Profile';
+import Profile from "./../Pages/Profile/Profile";
+import ForgotPassword from "../Pages/ForgotPassword/ForgotPassword";
+import PrivateRoute from "./PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -23,23 +25,37 @@ const router = createBrowserRouter([
       },
       {
         path: "events", // Fix the About Us route to be a direct child of MainLayout
-        element: <Events />,
+        element: (
+          <PrivateRoute>
+            <Events />
+          </PrivateRoute>
+        ),
       },
       {
         path: "notice", // Fix the About Us route to be a direct child of MainLayout
-        element: <Notice/>,
+        element: (
+          <PrivateRoute>
+            <Notice />
+          </PrivateRoute>
+        ),
       },
       {
         path: "profile", // Fix the About Us route to be a direct child of MainLayout
-        element: <Profile/>,
+        element: <PrivateRoute>
+          <Profile />
+        </PrivateRoute>,
       },
       {
         path: "signup", // Fix the About Us route to be a direct child of MainLayout
-        element: <Signup/>,
+        element: <Signup />,
       },
       {
         path: "login", // Fix the About Us route to be a direct child of MainLayout
-        element: <Login/>,
+        element: <Login />,
+      },
+      {
+        path: "forgotpass", // Fix the About Us route to be a direct child of MainLayout
+        element: <ForgotPassword />,
       },
     ],
   },

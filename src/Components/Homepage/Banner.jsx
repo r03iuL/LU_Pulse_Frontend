@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import img from "../../assets/Banner.svg";
 
 function Banner() {
@@ -17,9 +18,9 @@ function Banner() {
             Stay in the loop with all the latest updates from our university,
             right here on this website!
           </p>
-          <button className="rounded-lg bg-sky-500 text-white text-lg sm:text-xl px-6 py-2 sm:px-8 sm:py-3">
+          <Link to="/signup" className="rounded-lg bg-sky-500 text-white text-lg sm:text-xl px-6 py-2 sm:px-8 sm:py-3">
             Get Started
-          </button>
+          </Link>
         </div>
       </div>
     </div>

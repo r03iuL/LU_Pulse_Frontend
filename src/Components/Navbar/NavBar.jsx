@@ -1,6 +1,7 @@
 import { faUser } from "@fortawesome/free-solid-svg-icons/faUser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext"; // Import useAuth
 
 const navListItems = (
   <>
@@ -28,8 +29,20 @@ const navListItems = (
 );
 
 const NavBar = () => {
+  const { currentUser, logout } = useAuth(); // Get current user and logout function from AuthContext
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await logout(); // Call the logout method
+      navigate("/login"); // Redirect to login after logout
+    } catch (error) {
+      console.error("Failed to logout:", error);
+    }
+  };
+
   return (
-    <div className="navbar bg-blue-50">
+    <div className="navbar bg-blue-50 px-10">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -56,8 +69,8 @@ const NavBar = () => {
           </ul>
         </div>
         {/* lupulse */}
-        <Link className="p-0 lg:p- md:p-2 flex flex-col justify-center items-center mx-10 mt-5 lg:mt-0">
-          <div className="text-2xl lg:text-5xl md:text-5xl text-sky-600 font-bold">
+        <Link className="p-0 lg:p- md:p-2 flex flex-col justify-center items-center mx-2 lg:mx-10 mt-5 lg:mt-0">
+          <div className="text-2xl lg:text-5xl md:text-5xl text-sky-600 font-bold z-30">
             L U
           </div>
           <div className="text-[10px] lg:text-xl md:text-xl font-semibold px-">
@@ -69,12 +82,24 @@ const NavBar = () => {
         <ul className="menu menu-horizontal px-1">{navListItems}</ul>
       </div>
       <div className="navbar-end">
-        <Link to="/profile" className="btn btn-ghost font-semibold mx-2 p-4">
-          {" "}
-          <FontAwesomeIcon icon={faUser} />{" "}
-        </Link>
-        <Link to="/login" className="btn btn-ghost font-semibold mx-2">Login</Link>
-        <Link to="/signup"className="btn bg-black text-white">Sign up</Link>
+        {/* Conditionally render Profile, Login, and Signup */}
+        {currentUser ? (
+          <>
+            <Link to="/profile" className="btn btn-ghost font-semibold mx-2 p-4 border-cyan-700 rounded-full border-2">
+              <FontAwesomeIcon icon={faUser} /> 
+            </Link>
+            <button onClick={handleLogout} className="btn bg-black text-white font-semibold mx-2">
+              Log Out
+            </button>
+          </>
+        ) : (
+          <>
+            <Link to="/login" className="btn bg-black text-white font-semibold mx-2">
+              Log In
+            </Link>
+            
+          </>
+        )}
       </div>
     </div>
   );

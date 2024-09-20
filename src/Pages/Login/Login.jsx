@@ -1,23 +1,42 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const Login = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const { login } = useAuth(); // Access the login method from AuthContext
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle login logic
-    console.log(formData);
+
+    // Access email and password directly from the form
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
+
+    try {
+      setLoading(true);
+      setError("");
+
+      // Call the login method from AuthContext
+      const userCredential = await login(email, password);
+      const user = userCredential.user;
+
+      // Check if the email is verified
+      if (!user.emailVerified) {
+        setError("Please verify your email before logging in.");
+        return; // Stop here if the email is not verified
+      }
+
+      // Redirect to another page after successful login
+      navigate("/"); // Assuming you want to navigate to a dashboard page
+    } catch (error) {
+      setError(`Login failed: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -37,8 +56,6 @@ const Login = () => {
               <input
                 type="email"
                 name="email"
-                value={formData.email}
-                onChange={handleChange}
                 className="input input-bordered"
                 required
               />
@@ -52,20 +69,38 @@ const Login = () => {
               <input
                 type="password"
                 name="password"
-                value={formData.password}
-                onChange={handleChange}
                 className="input input-bordered"
                 required
               />
             </div>
 
+            {/* Error Message */}
+            {error && (
+              <div className="text-red-500 text-sm mb-4">
+                {error}
+              </div>
+            )}
+
             {/* Submit Button */}
             <div className="form-control mt-6">
-              <button type="submit" className="btn bg-sky-600 text-white text-lg">
-                Login
+              <button
+                type="submit"
+                className={`btn bg-sky-600 text-white text-lg ${loading ? "loading" : ""}`}
+              >
+                {loading ? "Logging in..." : "Login"}
               </button>
             </div>
           </form>
+
+          {/* Forgot Password Link */}
+          <div className="mt-4 text-sm text-right">
+            <p>
+              
+              <Link to="/forgotpass" className="text-red-400 font-semibold">
+              Forgot password ?{" "}
+              </Link>
+            </p>
+          </div>
 
           {/* Signup Redirect */}
           <div className="text-center mt-4">

@@ -1,111 +1,132 @@
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const Signup = () => {
-  const [formData, setFormData] = useState({
-    fullName: "",
-    id: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    userType: "student", // Default to 'student'
-    image: null, // Added image field
-  });
 
-  const handleChange = (e) => {
-    const { name, value, type, files } = e.target;
-    if (type === "file") {
-      setFormData({
-        ...formData,
-        [name]: files[0], // Store the file object
-      });
-    } else {
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
-    }
-  };
+  const { signup } = useAuth(); // Access the signup method from AuthContext
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const validateFullName = () => {
-    if (!formData.fullName) {
-      document.getElementById("fullNameError").innerText = "Full name is required";
-      return false;
-    } else {
-      document.getElementById("fullNameError").innerText = "";
-      return true;
-    }
-  };
 
-  const validateID = () => {
-    if (!formData.id) {
-      document.getElementById("idError").innerText = "ID is required";
-      return false;
-    } else {
-      document.getElementById("idError").innerText = "";
-      return true;
-    }
-  };
-
-  const validateEmail = () => {
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@lus\.ac\.bd$/;
-    if (!formData.email) {
-      document.getElementById("emailError").innerText = "Email is required";
-      return false;
-    } else if (!emailPattern.test(formData.email)) {
-      document.getElementById("emailError").innerText = "Email must end with @lus.ac.bd";
-      return false;
-    } else {
-      document.getElementById("emailError").innerText = "";
-      return true;
-    }
-  };
-
-  const validatePassword = () => {
-    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/;
-    if (!formData.password) {
-      document.getElementById("passwordError").innerText = "Password is required";
-      return false;
-    } else if (!passwordPattern.test(formData.password)) {
-      document.getElementById("passwordError").innerText = "Password must be at least 6 characters long, contain 1 uppercase letter, 1 lowercase letter, and 1 number";
-      return false;
-    } else {
-      document.getElementById("passwordError").innerText = "";
-      return true;
-    }
-  };
-
-  const validateConfirmPassword = () => {
-    if (!formData.confirmPassword) {
-      document.getElementById("confirmPasswordError").innerText = "Confirm password is required";
-      return false;
-    } else if (formData.password !== formData.confirmPassword) {
-      document.getElementById("confirmPasswordError").innerText = "Passwords do not match";
-      return false;
-    } else {
-      document.getElementById("confirmPasswordError").innerText = "";
-      return true;
-    }
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Run all validations
-    const isFullNameValid = validateFullName();
-    const isIDValid = validateID();
-    const isEmailValid = validateEmail();
-    const isPasswordValid = validatePassword();
-    const isConfirmPasswordValid = validateConfirmPassword();
+    const form = e.target;
+    const fullName = form.fullName.value;
+    const id = form.id.value;
+    const email = form.email.value;
+    const password = form.password.value;
+    const confirmPassword = form.confirmPassword.value;
+    const userType = form.userType.value;
+    const image = form.image.files[0];
 
-    // Check if all validations passed
-    if (isFullNameValid && isIDValid && isEmailValid && isPasswordValid && isConfirmPasswordValid) {
-      // Proceed with signup logic
-      console.log(formData);
-      alert("Signup successful!");
+    const userData = {
+      fullName,
+      id,
+      email,
+      userType,
+      image,
+    };
+
+    const modal = document.getElementById("my_modal_2");
+
+    // Validate form inputs before proceeding
+    if (
+      validateFullName(fullName) &&
+      validateID(id) &&
+      validateEmail(email) &&
+      validatePassword(password) &&
+      validateConfirmPassword(password, confirmPassword)
+    ) {
+      try {
+        setLoading(true);
+        setError("");
+        
+        // Call the signup method from AuthContext
+        await signup(email, password);
+        modal.showModal(); // Show success modal
+        console.log("User Data :", userData);
+
+        //Redirect to another page after signup
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
+      } catch (error) {
+        setError(`Signup failed: ${error.message}`);
+      } finally {
+        setLoading(false);
+      }
     } else {
-      // Handle invalid form
-      alert("Please correct the errors in the form.");
+      alert("Please correctly fill up the form.");
+    }
+  };
+
+  const validateFullName = (fullName) => {
+    const errorElement = document.getElementById("fullNameError");
+    if (!fullName) {
+      errorElement.innerText = "Full name is required";
+      return false;
+    } else {
+      errorElement.innerText = "";
+      return true;
+    }
+  };
+
+  const validateID = (id) => {
+    const errorElement = document.getElementById("idError");
+    if (!id) {
+      errorElement.innerText = "ID is required";
+      return false;
+    } else {
+      errorElement.innerText = "";
+      return true;
+    }
+  };
+
+  const validateEmail = (email) => {
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@lus\.ac\.bd$/;
+    const errorElement = document.getElementById("emailError");
+    if (!email) {
+      errorElement.innerText = "Email is required";
+      return false;
+    } else if (!emailPattern.test(email)) {
+      errorElement.innerText = "Email must end with @lus.ac.bd";
+      return false;
+    } else {
+      errorElement.innerText = "";
+      return true;
+    }
+  };
+
+  const validatePassword = (password) => {
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/;
+    const errorElement = document.getElementById("passwordError");
+    if (!password) {
+      errorElement.innerText = "Password is required";
+      return false;
+    } else if (!passwordPattern.test(password)) {
+      errorElement.innerText =
+        "Password must be at least 6 characters long, contain 1 uppercase letter, 1 lowercase letter, and 1 number";
+      return false;
+    } else {
+      errorElement.innerText = "";
+      return true;
+    }
+  };
+
+  const validateConfirmPassword = (password, confirmPassword) => {
+    const errorElement = document.getElementById("confirmPasswordError");
+    if (!confirmPassword) {
+      errorElement.innerText = "Confirm password is required";
+      return false;
+    } else if (password !== confirmPassword) {
+      errorElement.innerText = "Passwords do not match";
+      return false;
+    } else {
+      errorElement.innerText = "";
+      return true;
     }
   };
 
@@ -126,10 +147,8 @@ const Signup = () => {
               <input
                 type="text"
                 name="fullName"
-                value={formData.fullName}
-                onChange={handleChange}
-                onBlur={validateFullName} // Directly call validation
                 className="input input-bordered w-full"
+                onBlur={(e) => validateFullName(e.target.value)}
               />
               <span id="fullNameError" className="text-red-500 text-sm"></span>
             </div>
@@ -142,10 +161,8 @@ const Signup = () => {
               <input
                 type="text"
                 name="id"
-                value={formData.id}
-                onChange={handleChange}
-                onBlur={validateID} // Directly call validation
                 className="input input-bordered w-full"
+                onBlur={(e) => validateID(e.target.value)}
               />
               <span id="idError" className="text-red-500 text-sm"></span>
             </div>
@@ -158,10 +175,8 @@ const Signup = () => {
               <input
                 type="email"
                 name="email"
-                value={formData.email}
-                onChange={handleChange}
-                onBlur={validateEmail} // Directly call validation
                 className="input input-bordered w-full"
+                onBlur={(e) => validateEmail(e.target.value)}
               />
               <span id="emailError" className="text-red-500 text-sm"></span>
             </div>
@@ -171,12 +186,7 @@ const Signup = () => {
               <label className="label">
                 <span className="label-text font-bold">User Type</span>
               </label>
-              <select
-                name="userType"
-                value={formData.userType}
-                onChange={handleChange}
-                className="select select-bordered w-full"
-              >
+              <select name="userType" className="select select-bordered w-full">
                 <option value="student">Student</option>
                 <option value="faculty">Faculty</option>
                 <option value="staff">Staff</option>
@@ -191,10 +201,8 @@ const Signup = () => {
               <input
                 type="password"
                 name="password"
-                value={formData.password}
-                onChange={handleChange}
-                onBlur={validatePassword} // Directly call validation
                 className="input input-bordered w-full"
+                onBlur={(e) => validatePassword(e.target.value)}
               />
               <span id="passwordError" className="text-red-500 text-sm"></span>
             </div>
@@ -207,12 +215,18 @@ const Signup = () => {
               <input
                 type="password"
                 name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                onBlur={validateConfirmPassword} // Directly call validation
                 className="input input-bordered w-full"
+                onBlur={(e) =>
+                  validateConfirmPassword(
+                    e.target.form.password.value,
+                    e.target.value
+                  )
+                }
               />
-              <span id="confirmPasswordError" className="text-red-500 text-sm"></span>
+              <span
+                id="confirmPasswordError"
+                className="text-red-500 text-sm"
+              ></span>
             </div>
 
             {/* Image Upload */}
@@ -223,7 +237,6 @@ const Signup = () => {
               <input
                 type="file"
                 name="image"
-                onChange={handleChange}
                 className="input w-full"
                 accept="image/*"
               />
@@ -233,12 +246,23 @@ const Signup = () => {
             <div className="form-control mt-6">
               <button
                 type="submit"
-                className="btn bg-sky-600 text-white text-lg w-full"
+                className={`btn bg-sky-600 text-white text-lg ${loading ? "loading" : ""}`}
               >
-                Signup
+                {loading ? "Signing Up..." : "Submit"}
               </button>
             </div>
           </form>
+
+          {/* Modal for Email Verification */}
+          <dialog id="my_modal_2" className="modal text-center">
+            <div className="modal-box">
+              <h3 className="font-bold text-lg">SignUp successfull!</h3>
+              <p className="py-4">Please verify your email.</p>
+            </div>
+            <form method="dialog" className="modal-backdrop">
+              <button>close</button>
+            </form>
+          </dialog>
 
           {/* Login Redirect */}
           <div className="text-center mt-4">
