@@ -1,10 +1,10 @@
 const Profile = () => {
     // Example user data
     const user = {
-      fullName: "John Doe",
-      id: "123456",
-      email: "john.doe@example.com",
-      imageUrl: "https://via.placeholder.com/150", // Placeholder image URL
+      fullName: "Robiul Islam",
+      id: "123456789",
+      email: "Robiul@lus.ac.bd",
+      imageUrl: "https://i.ibb.co.com/VMN041k/A.jpg", // Placeholder image URL
     };
   
     return (
@@ -15,7 +15,7 @@ const Profile = () => {
             <img
               src={user.imageUrl}
               alt="Profile"
-              className="w-32 h-32 lg:w-80 lg:h-80 rounded-full border-4 border-gray-300"
+              className=" h-32 lg:w-80 lg:h-80 rounded-full border-4 border-gray-300"
             />
           </div>
           
