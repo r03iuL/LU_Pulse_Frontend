@@ -6,14 +6,14 @@ import { getAuth } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBrhJhnT8L7puE8klSjNjAJsOPqViL6Zq4",
-  authDomain: "lupulse.firebaseapp.com",
-  projectId: "lupulse",
-  storageBucket: "lupulse.appspot.com",
-  messagingSenderId: "94359982846",
-  appId: "1:94359982846:web:10167b392ec9bd2e3a0baf"
+  apiKey: import.meta.env.VITE_apiKey,
+  authDomain: import.meta.env.VITE_authDomain,
+  projectId: import.meta.env.VITE_projectId,
+  storageBucket: import.meta.env.VITE_storageBucket,
+  messagingSenderId: import.meta.env.VITE_messagingSenderId,
+  appId: import.meta.env.VITE_appId
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
