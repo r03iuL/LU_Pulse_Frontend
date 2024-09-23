@@ -75,7 +75,7 @@ const Notice = () => {
     setSearchQuery(e.target.value);
   };
 
-  // Filter notices based on selected category and search query
+  
   const filteredNotices = notices.filter(
     (notice) =>
       (selectedCategory === "all" ||

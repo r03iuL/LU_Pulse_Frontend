@@ -22,13 +22,6 @@ const Events = () => {
         venue: "University Campus",
         details: "Guided tour of the university campus.",
       },
-      {
-        name: "Campus Tour",
-        date: "2024-09-18",
-        time: "12:00 PM",
-        venue: "University Campus",
-        details: "Guided tour of the university campus.",
-      },
     ],
     "2024-09-20": [
       {
@@ -36,12 +29,59 @@ const Events = () => {
         date: "2024-09-20",
         time: "2:00 PM",
         venue: "Room 302, Engineering Building",
-        details:
-          "An insightful lecture on the applications of AI in modern education systems.",
+        details: "An insightful lecture on the applications of AI in modern education systems.",
       },
     ],
-   
+    "2024-09-22": [
+      {
+        name: "Workshop: Time Management for Students",
+        date: "2024-09-22",
+        time: "9:00 AM",
+        venue: "Library Conference Room",
+        details: "A practical workshop on improving time management skills for students.",
+      },
+      {
+        name: "Football Match: Students vs Faculty",
+        date: "2024-09-22",
+        time: "3:00 PM",
+        venue: "University Football Ground",
+        details: "A fun and competitive football match between students and faculty.",
+      },
+    ],
+    "2024-09-23": [
+      {
+        name: "Coding Bootcamp: Introduction to Web Development",
+        date: "2024-09-23",
+        time: "10:00 AM",
+        venue: "Computer Science Lab",
+        details: "A beginner-friendly workshop on building websites using HTML, CSS, and JavaScript.",
+      },
+      {
+        name: "Open Mic Night",
+        date: "2024-09-23",
+        time: "6:00 PM",
+        venue: "Student Lounge",
+        details: "An open mic night for students to showcase their talents, from poetry to music.",
+      },
+    ],
+    "2024-09-24": [
+      {
+        name: "Career Fair",
+        date: "2024-09-24",
+        time: "10:00 AM",
+        venue: "Main Hall",
+        details: "Meet with potential employers and explore job opportunities at the annual career fair.",
+      },
+      {
+        name: "Photography Exhibition: Student Works",
+        date: "2024-09-24",
+        time: "2:00 PM",
+        venue: "Art Gallery",
+        details: "An exhibition showcasing the best photography work by students from various departments.",
+      },
+    ],
   });
+  
 
   const handleDateChange = (newDate) => {
     setDate(newDate);
