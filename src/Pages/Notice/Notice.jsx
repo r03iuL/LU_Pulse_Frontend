@@ -13,7 +13,7 @@ const Notice = () => {
       title: "General Notice: Campus Safety Update",
       category: ["General"],
       description: "Due to recent safety concerns, the campus security has increased patrols around the main buildings. All students and faculty are advised to be vigilant and report any suspicious activity immediately to campus security. Please make sure to lock your vehicles and keep your personal belongings secure. Regular updates will be provided via email.",
-      image: "https://c4.wallpaperflare.com/wallpaper/448/174/357/neon-4k-hd-best-for-desktop-wallpaper-preview.jpg",
+      image: "https://i0.wp.com/www.lus.ac.bd/wp-content/uploads/2024/04/Screenshot_20240430_142547_Adobe-Acrobat.jpg?resize=768%2C576&ssl=1",
       date: "2024-03-15", // Issue date
     },
     {
@@ -21,7 +21,7 @@ const Notice = () => {
       title: "Holiday Notice: Mid-Semester Break",
       category: ["General", "Academic"],
       description: "The university will be observing a mid-semester break from April 10th to April 15th. During this period, all classes will be suspended, and administrative offices will be closed. Students are encouraged to use this time for rest and revision. Any urgent academic matters should be addressed to your department heads before the break begins.",
-      image: "",
+      image: "https://i0.wp.com/www.lus.ac.bd/wp-content/uploads/2024/09/20240902_124253.jpg?resize=768%2C535&ssl=1",
       date: "2024-03-20", // Issue date
     },
     {
@@ -29,7 +29,7 @@ const Notice = () => {
       title: "Exam Schedule: Spring Semester 2024",
       category: ["Academic"],
       description: "The exam schedule for the Spring Semester 2024 has been released. Exams will commence from May 1st and conclude on May 15th. Students can view their individual exam timetables and locations on the student portal. It is crucial to review the schedule carefully and be punctual for all exams. For any discrepancies, contact the examination office immediately.",
-      image: "https://via.placeholder.com/150",
+      image: "https://i0.wp.com/www.lus.ac.bd/wp-content/uploads/2024/06/notice-page-001.jpg?resize=690%2C661&ssl=1",
       date: "2024-03-25", // Issue date
     },
     {
@@ -37,7 +37,7 @@ const Notice = () => {
       title: "Bus Timings: New Semester Schedule",
       category: ["Transport"],
       description: "The bus service timings have been updated for the new semester. Buses will now run more frequently during peak hours to accommodate the increased number of students. The updated timetable is available on the university website and at all major bus stops. Please check the new schedule to avoid delays and ensure timely arrival to your classes.",
-      image: "https://via.placeholder.com/150",
+      image: "https://i0.wp.com/www.lus.ac.bd/wp-content/uploads/2024/04/Screenshot_20240430_142547_Adobe-Acrobat.jpg?resize=768%2C576&ssl=1",
       date: "2024-03-28", // Issue date
     },
     {
@@ -45,7 +45,7 @@ const Notice = () => {
       title: "Staff Meeting: Policy Updates",
       category: ["Staff"],
       description: "A mandatory staff meeting will be held on May 2nd from 10 AM to 12 PM in the conference hall. The meeting will cover important updates to university policies, including changes to leave entitlements and staff responsibilities. All staff members are required to attend. Refreshments will be provided. Please RSVP to the HR department by April 28th.",
-      image: "https://via.placeholder.com/150",
+      image: "https://i0.wp.com/www.lus.ac.bd/wp-content/uploads/2024/04/Screenshot_20240430_142547_Adobe-Acrobat.jpg?resize=768%2C576&ssl=1",
       date: "2024-04-01", // Issue date
     },
     {
@@ -53,7 +53,7 @@ const Notice = () => {
       title: "Academic Workshop: Research Methods",
       category: ["Academic"],
       description: "An academic workshop on advanced research methods will be conducted on April 25th from 9 AM to 4 PM in the seminar room. The workshop will cover various research techniques, data analysis, and academic writing. It is open to all graduate students and faculty members. Please register through the university’s online event portal to secure your spot.",
-      image: "https://via.placeholder.com/150",
+      image: "",
       date: "2024-04-05", // Issue date
     },
     {
@@ -61,7 +61,7 @@ const Notice = () => {
       title: "Transport Notice: Temporary Route Changes",
       category: ["Transport"],
       description: "Due to ongoing construction work on University Avenue, there will be temporary changes to the bus routes starting April 1st. The affected routes include Buses 3 and 5. Alternative routes and temporary stops have been established. Please check the transport section on the university’s website for detailed information and updates.",
-      image: "https://via.placeholder.com/150",
+      image: "",
       date: "2024-03-30", // Issue date
     },
   ];

@@ -5,7 +5,7 @@ import "react-calendar/dist/Calendar.css";
 const Events = () => {
   const [date, setDate] = useState(new Date());
 
-  // Updated event structure to include more details
+  
   const [events, setEvents] = useState({
     "2024-09-18": [
       {
@@ -40,7 +40,7 @@ const Events = () => {
           "An insightful lecture on the applications of AI in modern education systems.",
       },
     ],
-    // Add more dates and events as needed
+   
   });
 
   const handleDateChange = (newDate) => {
