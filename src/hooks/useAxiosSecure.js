@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 const axiosInstance = axios.create({
   baseURL: "http://localhost:5000",
-  withCredentials: true, // ✅ Ensure cookies are sent in requests
+  withCredentials: true, // Ensure cookies are sent in requests
 });
 
 const useAxiosSecure = () => {
@@ -51,7 +51,7 @@ const useAxiosSecure = () => {
     );
 
     return () => {
-      axiosInstance.interceptors.response.eject(interceptor); // ✅ Cleanup on unmount
+      axiosInstance.interceptors.response.eject(interceptor); 
     };
   }, [logout, navigate]);
 

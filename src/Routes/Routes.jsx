@@ -13,6 +13,8 @@ import Dashboard from '../Pages/Admin/Dashboard/Dashboard';
 import CreateEvent from '../Pages/Events/CreateEvent';
 import CreateNotice from '../Pages/Notice/CreateNotice';
 import SuperDashboard from "../Pages/Admin/Dashboard/SuperDashboard";
+import NoticeDetails from "../Pages/Notice/NoticeDetails";
+
 
 const router = createBrowserRouter([
   {
@@ -42,6 +44,10 @@ const router = createBrowserRouter([
             <Notice />
           </PrivateRoute>
         ),
+      },
+      {
+        path: "notice/:id", // Dynamic route for individual notices
+        element: <PrivateRoute><NoticeDetails /></PrivateRoute>,
       },
       {
         path: "profile", // Fix the About Us route to be a direct child of MainLayout

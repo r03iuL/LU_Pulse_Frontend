@@ -1,19 +1,19 @@
 import { faSearch } from "@fortawesome/free-solid-svg-icons/faSearch";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
-import { useAuth } from "../../context/AuthContext"; 
-import { useNavigate } from "react-router-dom";
+import useUserData from "../../hooks/userdata/useUserData";
 
 const Notice = () => {
   const axiosSecure = useAxiosSecure();
-  const { currentUser } = useAuth(); 
-  const navigate = useNavigate();
+  const { userData, loading } = useUserData();
   const [notices, setNotices] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const noticesPerPage = 5;
 
-  // Fetch notices from backend
   useEffect(() => {
     const fetchNotices = async () => {
       try {
@@ -27,69 +27,52 @@ const Notice = () => {
     fetchNotices();
   }, [axiosSecure]);
 
-  // Handle category selection
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value.toLowerCase());
+  };
+
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
+    setCurrentPage(1);
   };
 
-  // Handle search input
-  const handleSearch = (e) => {
-    setSearchQuery(e.target.value);
-  };
+  // Filter Notices Before Pagination
+  const filteredNotices = notices.filter(
+    (notice) =>
+      (selectedCategory === "all" || notice.category === selectedCategory) &&
+      notice.title.toLowerCase().includes(searchQuery)
+  );
 
-  // Delete Notice Function
-  const handleDelete = async (noticeId) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this notice?");
-    if (!confirmDelete) return;
-
-    try {
-      await axiosSecure.delete(`/notices/${noticeId}`);
-      setNotices((prevNotices) => prevNotices.filter((notice) => notice._id !== noticeId));
-      alert("Notice deleted successfully!");
-    } catch (error) {
-      console.error("Error deleting notice:", error);
-    }
-  };
-
-  // Filtering Notices
-  const filteredNotices = notices.filter((notice) => {
-    const matchesCategory = selectedCategory === "all" || notice.category === selectedCategory;
-    const matchesSearch = notice.title.toLowerCase().includes(searchQuery.toLowerCase());
-
-    return matchesCategory && matchesSearch;
-  });
-
-  // Check if the user is an admin or super admin
-  const isAdmin = currentUser?.adminRole === "admin" || currentUser?.adminRole === "superadmin";
-  console.log( currentUser?.adminRole);
+  // Pagination Logic
+  const indexOfLastNotice = currentPage * noticesPerPage;
+  const indexOfFirstNotice = indexOfLastNotice - noticesPerPage;
+  const currentNotices = filteredNotices.slice(indexOfFirstNotice, indexOfLastNotice);
 
   return (
-    <div className="bg-gray-100">
-      <div className="min-h-screen max-w-7xl px-4 sm:px-6 lg:px-20 py-10 mx-auto">
-        
-        {/* Search Bar */}
-        <div className="mb-6">
-          <div className="relative">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={handleSearch}
-              placeholder="Search notices..."
-              className="w-full p-5 rounded-xl shadow-md border border-gray-300 focus:outline-none pr-10"
-            />
-            <span className="absolute right-7 top-5 text-gray-500">
-              <FontAwesomeIcon icon={faSearch} />
-            </span>
-          </div>
+    <div className="bg-gray-100 min-h-screen max-w-10xl px-4 sm:px-6 lg:px-20 py-10 mx-auto">
+      {/* Search Bar */}
+      <div className="mb-6">
+        <div className="relative">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={handleSearch}
+            placeholder="Search notices..."
+            className="w-full p-4 rounded-xl shadow-md border border-gray-300 focus:outline-none pr-10"
+          />
+          <span className="absolute right-7 top-4 text-gray-500">
+            <FontAwesomeIcon icon={faSearch} />
+          </span>
         </div>
+      </div>
 
-        <div className="flex flex-col lg:flex-row">
-          
-          {/* Sidebar - Notice Categories */}
-          <div className="w-full lg:w-1/4 p-4 bg-white shadow-lg rounded-xl mb-6 lg:mb-0 lg:mr-6">
-            <h3 className="text-xl font-semibold mb-4">Categories</h3>
-            <ul className="space-y-2">
-              {["all", "General", "Academic", "Events", "Transport"].map((category) => (
+      <div className="flex flex-col lg:flex-row">
+        {/* Sidebar - Notice Categories */}
+        <div className="w-full lg:w-1/4 p-4 bg-white shadow-lg rounded-xl mb-6 lg:mb-0 lg:mr-6">
+          <h3 className="text-xl font-semibold mb-4">Categories</h3>
+          <ul className="space-y-2">
+            {["all", "General", "Academic", "Events", "Transport"].map(
+              (category) => (
                 <li
                   key={category}
                   className={`cursor-pointer p-4 rounded-md ${
@@ -99,55 +82,55 @@ const Notice = () => {
                 >
                   {category === "all" ? "All Notices" : `${category} Notices`}
                 </li>
-              ))}
-            </ul>
-          </div>
+              )
+            )}
+          </ul>
+        </div>
 
-          {/* Notice List */}
-          <div className="w-full lg:w-3/4 p-6 bg-white rounded-xl shadow-lg">
-            {filteredNotices.length > 0 ? (
-              filteredNotices.map((notice) => (
-                <div key={notice._id} className="my-6 p-4 bg-slate-50 shadow-md rounded-lg">
-                  <h4 className="text-xl font-bold">
-                    {notice.title}{" "}
-                    <span className="text-sm font-semibold text-gray-400 px-2">
-                      {notice.category}
-                    </span>
-                  </h4>
-                  <p className="text-md font-bold text-gray-600 py-2">
-                    Issued on: {new Date(notice.date).toLocaleDateString()}
+        {/* Notice List */}
+        <div className="w-full lg:w-3/4 p-6 bg-white rounded-xl shadow-lg">
+          <h3 className="text-xl font-semibold mb-4">All Notices</h3>
+          <ul>
+            {loading ? (
+              <p>Loading notices...</p>
+            ) : currentNotices.length > 0 ? (
+              currentNotices.map((notice) => (
+                <li key={notice._id} className="mb-4 border-b pb-4">
+                  <Link
+                    to={`/notice/${notice._id}`}
+                    className="text-blue-600 hover:underline font-semibold"
+                  >
+                    {notice.title}
+                  </Link>
+                  <p className="text-sm text-gray-500">
+                    {new Date(notice.date).toLocaleDateString()}
                   </p>
-                  <p>{notice.description}</p>
-                  {notice.image && (
-                    <img
-                      src={notice.image}
-                      alt={notice.title}
-                      className="mt-3 w-full max-w-xs h-auto rounded-md"
-                    />
-                  )}
-
-                  {/* Show Edit & Delete buttons ONLY for Admins & Super Admins */}
-                  {isAdmin && (
-                    <div className="mt-4 flex gap-4">
-                      <button
-                        onClick={() => navigate(`/update-notice/${notice._id}`)}
-                        className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
-                      >
-                        Update
-                      </button>
-                      <button
-                        onClick={() => handleDelete(notice._id)}
-                        className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  )}
-                </div>
+                  <p className="text-sm text-gray-600">
+                    <strong>{notice.category}</strong> | <strong>{notice.targetAudience.join(", ")}</strong>
+                  </p>
+                </li>
               ))
             ) : (
-              <p>No notices found in this category.</p>
+              <p>No notices found.</p>
             )}
+          </ul>
+
+          {/* Pagination Controls */}
+          <div className="mt-6 flex justify-center gap-4">
+            <button
+              onClick={() => setCurrentPage(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-4 py-2 bg-blue-500 text-white rounded-md disabled:opacity-50"
+            >
+              Previous
+            </button>
+            <button
+              onClick={() => setCurrentPage(currentPage + 1)}
+              disabled={indexOfLastNotice >= filteredNotices.length}
+              className="px-4 py-2 bg-blue-500 text-white rounded-md disabled:opacity-50"
+            >
+              Next
+            </button>
           </div>
         </div>
       </div>
