@@ -72,7 +72,7 @@ const Profile = () => {
             </div>
           </div>
 
-          {/* ✅ Department Field */}
+          {/*  Department Field */}
           <div className="mb-4">
             <p className="text-lg font-semibold mb-1">Department:</p>
             <div className="p-4 border border-gray-300 rounded-md">
@@ -80,14 +80,15 @@ const Profile = () => {
             </div>
           </div>
 
-          {user.userType !== "student" && (
+          {/*  Display designation only for faculty & staff */}
+          {user.userType === "faculty" || user.userType === "staff" ? (
             <div className="mt-4">
               <p className="text-lg font-semibold mb-1">Designation:</p>
               <div className="p-4 border border-gray-300 rounded-md">
-                {user.designation || "N/A"}
+                {user.designation || "Not Provided"}
               </div>
             </div>
-          )}
+          ) : null}
         </div>
 
         {/* Edit Button */}

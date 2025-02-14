@@ -22,7 +22,10 @@ const Signup = () => {
     const confirmPassword = form.confirmPassword.value;
     const userType = form.userType.value;
     const department = form.department.value;
-    const image = form.image.files[0]; // Capture the image file
+    const image = form.image.files[0]; 
+
+    // Set designation based on userType
+    const finalDesignation = userType === "student" ? "Student" : designation;
 
     // Validate form inputs before proceeding
     if (
@@ -40,7 +43,7 @@ const Signup = () => {
         // Upload the image if it exists
         let imageUrl = null;
         if (image) {
-          imageUrl = await uploadImage(image); // Upload image and get the URL
+          imageUrl = await uploadImage(image); 
         }
 
         // Prepare user data with image URL
@@ -50,11 +53,8 @@ const Signup = () => {
           email,
           userType,
           department,
-          image: imageUrl || null, // If no image, send null.
-          designation:
-            userType === "Faculty" || userType === "Staff"
-              ? designation
-              : "Student",
+          image: imageUrl || null, 
+          designation: finalDesignation,
         };
 
         console.log("User Data:", userData);
@@ -76,7 +76,7 @@ const Signup = () => {
 
         if (data.message === "User registered successfully") {
           const modal = document.getElementById("my_modal_2");
-          modal.showModal(); // Show success modal
+          modal.showModal(); 
           console.log("User Data from response:", data.user);
 
           // Redirect to login page after signup
@@ -169,7 +169,6 @@ const Signup = () => {
     errorElement.innerText = "";
     return true;
   };
-  
 
   const validatePassword = (password) => {
     const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/;
