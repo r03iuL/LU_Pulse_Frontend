@@ -1,91 +1,72 @@
 import { faSearch } from "@fortawesome/free-solid-svg-icons/faSearch";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { useAuth } from "../../context/AuthContext"; 
+import { useNavigate } from "react-router-dom";
 
 const Notice = () => {
+  const axiosSecure = useAxiosSecure();
+  const { currentUser } = useAuth(); 
+  const navigate = useNavigate();
+  const [notices, setNotices] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Sample notices data with multiple categories
-  const notices = [
-    {
-      id: 1,
-      title: "General Notice: Campus Safety Update",
-      category: ["General"],
-      description: "Due to recent safety concerns, the campus security has increased patrols around the main buildings. All students and faculty are advised to be vigilant and report any suspicious activity immediately to campus security. Please make sure to lock your vehicles and keep your personal belongings secure. Regular updates will be provided via email.",
-      image: "https://i0.wp.com/www.lus.ac.bd/wp-content/uploads/2024/04/Screenshot_20240430_142547_Adobe-Acrobat.jpg?resize=768%2C576&ssl=1",
-      date: "2024-03-15", // Issue date
-    },
-    {
-      id: 2,
-      title: "Holiday Notice: Mid-Semester Break",
-      category: ["General", "Academic"],
-      description: "The university will be observing a mid-semester break from April 10th to April 15th. During this period, all classes will be suspended, and administrative offices will be closed. Students are encouraged to use this time for rest and revision. Any urgent academic matters should be addressed to your department heads before the break begins.",
-      image: "https://i0.wp.com/www.lus.ac.bd/wp-content/uploads/2024/09/20240902_124253.jpg?resize=768%2C535&ssl=1",
-      date: "2024-03-20", // Issue date
-    },
-    {
-      id: 3,
-      title: "Exam Schedule: Spring Semester 2024",
-      category: ["Academic"],
-      description: "The exam schedule for the Spring Semester 2024 has been released. Exams will commence from May 1st and conclude on May 15th. Students can view their individual exam timetables and locations on the student portal. It is crucial to review the schedule carefully and be punctual for all exams. For any discrepancies, contact the examination office immediately.",
-      image: "https://i0.wp.com/www.lus.ac.bd/wp-content/uploads/2024/06/notice-page-001.jpg?resize=690%2C661&ssl=1",
-      date: "2024-03-25", // Issue date
-    },
-    {
-      id: 4,
-      title: "Bus Timings: New Semester Schedule",
-      category: ["Transport"],
-      description: "The bus service timings have been updated for the new semester. Buses will now run more frequently during peak hours to accommodate the increased number of students. The updated timetable is available on the university website and at all major bus stops. Please check the new schedule to avoid delays and ensure timely arrival to your classes.",
-      image: "https://i0.wp.com/www.lus.ac.bd/wp-content/uploads/2024/04/Screenshot_20240430_142547_Adobe-Acrobat.jpg?resize=768%2C576&ssl=1",
-      date: "2024-03-28", // Issue date
-    },
-    {
-      id: 5,
-      title: "Staff Meeting: Policy Updates",
-      category: ["Staff"],
-      description: "A mandatory staff meeting will be held on May 2nd from 10 AM to 12 PM in the conference hall. The meeting will cover important updates to university policies, including changes to leave entitlements and staff responsibilities. All staff members are required to attend. Refreshments will be provided. Please RSVP to the HR department by April 28th.",
-      image: "https://i0.wp.com/www.lus.ac.bd/wp-content/uploads/2024/04/Screenshot_20240430_142547_Adobe-Acrobat.jpg?resize=768%2C576&ssl=1",
-      date: "2024-04-01", // Issue date
-    },
-    {
-      id: 6,
-      title: "Academic Workshop: Research Methods",
-      category: ["Academic"],
-      description: "An academic workshop on advanced research methods will be conducted on April 25th from 9 AM to 4 PM in the seminar room. The workshop will cover various research techniques, data analysis, and academic writing. It is open to all graduate students and faculty members. Please register through the university’s online event portal to secure your spot.",
-      image: "",
-      date: "2024-04-05", // Issue date
-    },
-    {
-      id: 7,
-      title: "Transport Notice: Temporary Route Changes",
-      category: ["Transport"],
-      description: "Due to ongoing construction work on University Avenue, there will be temporary changes to the bus routes starting April 1st. The affected routes include Buses 3 and 5. Alternative routes and temporary stops have been established. Please check the transport section on the university’s website for detailed information and updates.",
-      image: "",
-      date: "2024-03-30", // Issue date
-    },
-  ];
-  
+  // Fetch notices from backend
+  useEffect(() => {
+    const fetchNotices = async () => {
+      try {
+        const response = await axiosSecure.get("/notices");
+        setNotices(response.data);
+      } catch (error) {
+        console.error("Error fetching notices:", error);
+      }
+    };
 
+    fetchNotices();
+  }, [axiosSecure]);
+
+  // Handle category selection
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
   };
 
+  // Handle search input
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
   };
 
-  
-  const filteredNotices = notices.filter(
-    (notice) =>
-      (selectedCategory === "all" ||
-        notice.category.includes(selectedCategory)) &&
-      notice.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Delete Notice Function
+  const handleDelete = async (noticeId) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this notice?");
+    if (!confirmDelete) return;
+
+    try {
+      await axiosSecure.delete(`/notices/${noticeId}`);
+      setNotices((prevNotices) => prevNotices.filter((notice) => notice._id !== noticeId));
+      alert("Notice deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting notice:", error);
+    }
+  };
+
+  // Filtering Notices
+  const filteredNotices = notices.filter((notice) => {
+    const matchesCategory = selectedCategory === "all" || notice.category === selectedCategory;
+    const matchesSearch = notice.title.toLowerCase().includes(searchQuery.toLowerCase());
+
+    return matchesCategory && matchesSearch;
+  });
+
+  // Check if the user is an admin or super admin
+  const isAdmin = currentUser?.adminRole === "admin" || currentUser?.adminRole === "superadmin";
+  console.log( currentUser?.adminRole);
 
   return (
     <div className="bg-gray-100">
       <div className="min-h-screen max-w-7xl px-4 sm:px-6 lg:px-20 py-10 mx-auto">
+        
         {/* Search Bar */}
         <div className="mb-6">
           <div className="relative">
@@ -103,60 +84,22 @@ const Notice = () => {
         </div>
 
         <div className="flex flex-col lg:flex-row">
-          {/* Left Sidebar for Notice Categories */}
+          
+          {/* Sidebar - Notice Categories */}
           <div className="w-full lg:w-1/4 p-4 bg-white shadow-lg rounded-xl mb-6 lg:mb-0 lg:mr-6">
             <h3 className="text-xl font-semibold mb-4">Categories</h3>
             <ul className="space-y-2">
-              <li
-                className={`cursor-pointer p-4 rounded-md ${
-                  selectedCategory === "all"
-                    ? "bg-blue-500 text-white"
-                    : "hover:bg-gray-200"
-                }`}
-                onClick={() => handleCategoryChange("all")}
-              >
-                All Notices
-              </li>
-              <li
-                className={`cursor-pointer p-4 rounded-md ${
-                  selectedCategory === "General"
-                    ? "bg-blue-500 text-white"
-                    : "hover:bg-gray-200"
-                }`}
-                onClick={() => handleCategoryChange("General")}
-              >
-                General Notices
-              </li>
-              <li
-                className={`cursor-pointer p-4 rounded-md ${
-                  selectedCategory === "Academic"
-                    ? "bg-blue-500 text-white"
-                    : "hover:bg-gray-200"
-                }`}
-                onClick={() => handleCategoryChange("Academic")}
-              >
-                Academic Notices
-              </li>
-              <li
-                className={`cursor-pointer p-4 rounded-md ${
-                  selectedCategory === "Transport"
-                    ? "bg-blue-500 text-white"
-                    : "hover:bg-gray-200"
-                }`}
-                onClick={() => handleCategoryChange("Transport")}
-              >
-                Transport Notices
-              </li>
-              <li
-                className={`cursor-pointer p-4 rounded-md ${
-                  selectedCategory === "Staff"
-                    ? "bg-blue-500 text-white"
-                    : "hover:bg-gray-200"
-                }`}
-                onClick={() => handleCategoryChange("Staff")}
-              >
-                Staff Notices
-              </li>
+              {["all", "General", "Academic", "Events", "Transport"].map((category) => (
+                <li
+                  key={category}
+                  className={`cursor-pointer p-4 rounded-md ${
+                    selectedCategory === category ? "bg-blue-500 text-white" : "hover:bg-gray-200"
+                  }`}
+                  onClick={() => handleCategoryChange(category)}
+                >
+                  {category === "all" ? "All Notices" : `${category} Notices`}
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -164,14 +107,11 @@ const Notice = () => {
           <div className="w-full lg:w-3/4 p-6 bg-white rounded-xl shadow-lg">
             {filteredNotices.length > 0 ? (
               filteredNotices.map((notice) => (
-                <div
-                  key={notice.id}
-                  className="my-6 p-4 bg-slate-50 shadow-md rounded-lg"
-                >
+                <div key={notice._id} className="my-6 p-4 bg-slate-50 shadow-md rounded-lg">
                   <h4 className="text-xl font-bold">
                     {notice.title}{" "}
                     <span className="text-sm font-semibold text-gray-400 px-2">
-                      {notice.category.join(", ")}
+                      {notice.category}
                     </span>
                   </h4>
                   <p className="text-md font-bold text-gray-600 py-2">
@@ -184,6 +124,24 @@ const Notice = () => {
                       alt={notice.title}
                       className="mt-3 w-full max-w-xs h-auto rounded-md"
                     />
+                  )}
+
+                  {/* Show Edit & Delete buttons ONLY for Admins & Super Admins */}
+                  {isAdmin && (
+                    <div className="mt-4 flex gap-4">
+                      <button
+                        onClick={() => navigate(`/update-notice/${notice._id}`)}
+                        className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+                      >
+                        Update
+                      </button>
+                      <button
+                        onClick={() => handleDelete(notice._id)}
+                        className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   )}
                 </div>
               ))

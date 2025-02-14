@@ -10,8 +10,9 @@ import Profile from "./../Pages/Profile/Profile";
 import ForgotPassword from "../Pages/ForgotPassword/ForgotPassword";
 import PrivateRoute from "./PrivateRoute";
 import Dashboard from '../Pages/Admin/Dashboard/Dashboard';
-import CreateEvent from './../Pages/Admin/CreateEvent';
-import CreateNotice from './../Pages/Admin/CreateNotice';
+import CreateEvent from '../Pages/Events/CreateEvent';
+import CreateNotice from '../Pages/Notice/CreateNotice';
+import SuperDashboard from "../Pages/Admin/Dashboard/SuperDashboard";
 
 const router = createBrowserRouter([
   {
@@ -49,9 +50,15 @@ const router = createBrowserRouter([
         </PrivateRoute>,
       },
       {
-        path: "dashboard", // Fix the About Us route to be a direct child of MainLayout
+        path: "admindashboard", // Fix the About Us route to be a direct child of MainLayout
         element: <PrivateRoute>
           <Dashboard/>
+        </PrivateRoute>,
+      },
+      {
+        path: "superdashboard", // Fix the About Us route to be a direct child of MainLayout
+        element: <PrivateRoute>
+          <SuperDashboard />
         </PrivateRoute>,
       },
       {

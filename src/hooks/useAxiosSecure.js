@@ -16,8 +16,9 @@ const useAxiosSecure = () => {
     const interceptor = axiosInstance.interceptors.response.use(
       (response) => response,
       async (error) => {
-        //  Prevent redirecting if it's a login request
-        if (error.config.url === "/login") {
+        console.log(error.config.url);
+        // Prevent redirecting if it's a login or signup request
+        if (error.config.url.endsWith("/login") || error.config.url.endsWith("/signup")) {
           return Promise.reject(error);
         }
 
@@ -25,8 +26,14 @@ const useAxiosSecure = () => {
           console.error("Unauthorized request. Logging out and redirecting.");
 
           try {
+
+            await new Promise((resolve) => setTimeout(resolve, 1500)); // add delay
             // Call backend logout API to clear cookies
-            await axios.post("http://localhost:5000/logout", {}, { withCredentials: true });
+            await axios.post(
+              "http://localhost:5000/logout",
+              {},
+              { withCredentials: true }
+            );
 
             // Ensure Firebase logout is also called
             await logout();

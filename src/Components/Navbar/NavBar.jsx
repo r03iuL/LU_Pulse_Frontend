@@ -6,25 +6,27 @@ import { useAuth } from "../../context/AuthContext";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const NavBar = () => {
-  const { currentUser, logout } = useAuth(); // Get current user and logout function from AuthContext
+  const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
-  const [userImage, setUserImage] = useState(null); // Store user image
+  const [userImage, setUserImage] = useState(null);
+  const [adminRole, setAdminRole] = useState(null);
   const axiosSecure = useAxiosSecure();
-  
+
   // Fetch user data from MongoDB
   useEffect(() => {
     if (!currentUser || !currentUser.email) return; // Ensure user is logged in
-  
+
     const fetchUserData = async () => {
       try {
         //  Delay fetching user data to ensure authentication is set
-        await new Promise((resolve) => setTimeout(resolve, 500)); // Adjust delay as needed
-  
+        await new Promise((resolve) => setTimeout(resolve, 500));
+
         const response = await axiosSecure.get(
           `/users/${encodeURIComponent(currentUser.email)}`
         );
-  
+
         setUserImage(response.data.image);
+        setAdminRole(response.data.adminRole);
       } catch (error) {
         if (error.response?.status === 401 || error.response?.status === 403) {
           console.warn("Unauthorized request. User might be logged out.");
@@ -36,16 +38,15 @@ const NavBar = () => {
         }
       }
     };
-  
+
     fetchUserData();
   }, [currentUser, axiosSecure]);
-  
 
   const handleLogout = async () => {
     try {
       await axiosSecure.post("/logout", {});
-      await logout(); // Ensure Firebase logout works as well
-      navigate("/login"); // Redirect after logout
+      await logout();
+      navigate("/login");
     } catch (error) {
       console.error("Failed to logout:", error);
     }
@@ -82,7 +83,7 @@ const NavBar = () => {
             </li>
             <li>
               <a href="/notice" className="font-semibold text-lg">
-                Notice&apos;s
+                Notice's
               </a>
             </li>
             <li>
@@ -90,11 +91,20 @@ const NavBar = () => {
                 Events
               </a>
             </li>
-            <li>
-              <a href="/dashboard" className="font-semibold text-lg">
-                Dashboard
-              </a>
-            </li>
+            {(adminRole === "admin" || adminRole === "superadmin") && (
+              <li>
+                <Link
+                  to={
+                    adminRole === "superadmin"
+                      ? "/superdashboard"
+                      : "/admindashboard"
+                  }
+                  className="font-semibold text-lg"
+                >
+                  Dashboard
+                </Link>
+              </li>
+            )}
             <li>
               <a href="/about" className="font-semibold text-lg">
                 About
@@ -121,7 +131,7 @@ const NavBar = () => {
           </li>
           <li>
             <a href="/notice" className="font-semibold text-lg">
-              Notice&apos;s
+              Notice's
             </a>
           </li>
           <li>
@@ -129,11 +139,20 @@ const NavBar = () => {
               Events
             </a>
           </li>
-          <li>
-            <a href="/dashboard" className="font-semibold text-lg">
-              Dashboard
-            </a>
-          </li>
+          {(adminRole === "admin" || adminRole === "superadmin") && (
+            <li>
+              <Link
+                to={
+                  adminRole === "superadmin"
+                    ? "/superdashboard"
+                    : "/admindashboard"
+                }
+                className="font-semibold text-lg"
+              >
+                Dashboard
+              </Link>
+            </li>
+          )}
           <li>
             <a href="/about" className="font-semibold text-lg">
               About
