@@ -9,12 +9,13 @@ import Notice from "../Pages/Notice/Notice";
 import Profile from "./../Pages/Profile/Profile";
 import ForgotPassword from "../Pages/ForgotPassword/ForgotPassword";
 import PrivateRoute from "./PrivateRoute";
-import Dashboard from '../Pages/Admin/Dashboard/Dashboard';
-import CreateEvent from '../Pages/Events/CreateEvent';
-import CreateNotice from '../Pages/Notice/CreateNotice';
-import SuperDashboard from "../Pages/Admin/Dashboard/SuperDashboard";
+import Dashboard from "../Pages/Admin/Dashboard/Dashboard";
+import CreateEvent from "../Pages/Events/CreateEvent";
+import CreateNotice from "../Pages/Notice/CreateNotice";
+import SuperDashboard from "../Pages/Admin/SuperDashboard/SuperDashboard";
 import NoticeDetails from "../Pages/Notice/NoticeDetails";
-
+import AdminNotice from "../Pages/Notice/AdminNotice";
+import EditNotice from "../Pages/Notice/EditNotice";
 
 const router = createBrowserRouter([
   {
@@ -47,37 +48,67 @@ const router = createBrowserRouter([
       },
       {
         path: "notice/:id", // Dynamic route for individual notices
-        element: <PrivateRoute><NoticeDetails /></PrivateRoute>,
+        element: (
+          <PrivateRoute>
+            <NoticeDetails />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/edit-notice/:id", // Dynamic route for individual notices
+        element: (
+          <PrivateRoute>
+            <EditNotice />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "adminnotice", // Dynamic route for individual notices
+        element: (
+          <PrivateRoute>
+            <AdminNotice />
+          </PrivateRoute>
+        ),
       },
       {
         path: "profile", // Fix the About Us route to be a direct child of MainLayout
-        element: <PrivateRoute>
-          <Profile />
-        </PrivateRoute>,
+        element: (
+          <PrivateRoute>
+            <Profile />
+          </PrivateRoute>
+        ),
       },
       {
         path: "admindashboard", // Fix the About Us route to be a direct child of MainLayout
-        element: <PrivateRoute>
-          <Dashboard/>
-        </PrivateRoute>,
+        element: (
+          <PrivateRoute>
+            <Dashboard />
+          </PrivateRoute>
+        ),
       },
       {
         path: "superdashboard", // Fix the About Us route to be a direct child of MainLayout
-        element: <PrivateRoute>
-          <SuperDashboard />
-        </PrivateRoute>,
+        element: (
+          <PrivateRoute>
+            <SuperDashboard />
+          </PrivateRoute>
+        ),
       },
       {
         path: "createevent", // Fix the About Us route to be a direct child of MainLayout
-        element: <PrivateRoute>
-          <CreateEvent />
-        </PrivateRoute>,
+        element: (
+          <PrivateRoute>
+            <CreateEvent />
+          </PrivateRoute>
+        ),
       },
       {
         path: "createnotice", // Fix the About Us route to be a direct child of MainLayout
-        element: <PrivateRoute>
-          <CreateNotice />
-        </PrivateRoute>,
+        element: (
+          <PrivateRoute>
+            <CreateNotice />
+          </PrivateRoute>
+        ),
       },
       {
         path: "signup", // Fix the About Us route to be a direct child of MainLayout
