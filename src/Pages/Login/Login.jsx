@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const Login = () => {
   const { login } = useAuth(); // Access the login method from AuthContext
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const axiosSecure = useAxiosSecure();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,12 +25,23 @@ const Login = () => {
       // Call the login method from AuthContext
       const userCredential = await login(email, password);
       const user = userCredential.user;
-
+   
       // Check if the email is verified
       if (!user.emailVerified) {
         setError("Please verify your email before logging in.");
         return; // Stop here if the email is not verified
       }
+
+      const payload = {
+        uid: user.uid,
+        email: user.email,
+        emailVerified: user.emailVerified,
+      };
+
+      //API call to generate JWT token
+      axiosSecure
+        .post("/login",  payload)
+        .then((res) => console.log(res.data));
 
       // Redirect to another page after successful login
       navigate("/"); // Assuming you want to navigate to a dashboard page
@@ -75,17 +88,15 @@ const Login = () => {
             </div>
 
             {/* Error Message */}
-            {error && (
-              <div className="text-red-500 text-sm mb-4">
-                {error}
-              </div>
-            )}
+            {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
 
             {/* Submit Button */}
             <div className="form-control mt-6">
               <button
                 type="submit"
-                className={`btn bg-sky-600 text-white text-lg ${loading ? "loading" : ""}`}
+                className={`btn bg-sky-600 text-white text-lg ${
+                  loading ? "loading" : ""
+                }`}
               >
                 {loading ? "Logging in..." : "Login"}
               </button>
@@ -95,9 +106,8 @@ const Login = () => {
           {/* Forgot Password Link */}
           <div className="mt-4 text-sm text-right">
             <p>
-              
               <Link to="/forgotpass" className="text-red-400 font-semibold">
-              Forgot password ?{" "}
+                Forgot password ?{" "}
               </Link>
             </p>
           </div>
@@ -105,7 +115,7 @@ const Login = () => {
           {/* Signup Redirect */}
           <div className="text-center mt-4">
             <p className="text-sm">
-              Don't have an account?{" "}
+              Don&apos;t have an account?{" "}
               <Link to="/signup" className="text-primary font-semibold">
                 Sign Up
               </Link>

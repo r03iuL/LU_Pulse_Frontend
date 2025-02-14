@@ -9,6 +9,9 @@ import Notice from "../Pages/Notice/Notice";
 import Profile from "./../Pages/Profile/Profile";
 import ForgotPassword from "../Pages/ForgotPassword/ForgotPassword";
 import PrivateRoute from "./PrivateRoute";
+import Dashboard from '../Pages/Admin/Dashboard/Dashboard';
+import CreateEvent from './../Pages/Admin/CreateEvent';
+import CreateNotice from './../Pages/Admin/CreateNotice';
 
 const router = createBrowserRouter([
   {
@@ -43,6 +46,24 @@ const router = createBrowserRouter([
         path: "profile", // Fix the About Us route to be a direct child of MainLayout
         element: <PrivateRoute>
           <Profile />
+        </PrivateRoute>,
+      },
+      {
+        path: "dashboard", // Fix the About Us route to be a direct child of MainLayout
+        element: <PrivateRoute>
+          <Dashboard/>
+        </PrivateRoute>,
+      },
+      {
+        path: "createevent", // Fix the About Us route to be a direct child of MainLayout
+        element: <PrivateRoute>
+          <CreateEvent />
+        </PrivateRoute>,
+      },
+      {
+        path: "createnotice", // Fix the About Us route to be a direct child of MainLayout
+        element: <PrivateRoute>
+          <CreateNotice />
         </PrivateRoute>,
       },
       {
