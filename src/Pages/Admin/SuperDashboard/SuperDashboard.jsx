@@ -31,18 +31,22 @@ const SuperDashboard = () => {
 
       try {
         // Fetch all required dashboard stats
-        const [usersRes, eventsRes, noticesRes, adminsRes] = await Promise.all([
+        const [usersRes, eventsRes, noticesRes] = await Promise.all([
           axiosSecure.get("/users"), // Fetch total users
           axiosSecure.get("/events"), // Fetch total events
           axiosSecure.get("/notices"), // Fetch total notices
-          axiosSecure.get("/users?role=admin"), // Fetch total admins
         ]);
+
+        // Manually filter admins from the users response
+        const admins = usersRes.data.filter(user => user.adminRole === 'admin');
 
         // Set state with response data
         setTotalUsers(usersRes.data.length);
         setTotalEvents(eventsRes.data.length);
         setTotalNotices(noticesRes.data.length);
-        setTotalAdmins(adminsRes.data.length);
+        setTotalAdmins(admins.length);
+
+        console.log("Admin no:", admins.length);
 
         // Set recent notices & events (fetching latest 3)
         setRecentNotices(noticesRes.data.slice(-5).reverse());
