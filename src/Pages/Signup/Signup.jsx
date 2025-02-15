@@ -61,7 +61,7 @@ const Signup = () => {
         console.log("User Data:", userData);
 
         // Send the user data to the backend /signup endpoint
-        const response = await fetch("http://localhost:5000/signup", {
+        const response = await fetch("https://lu-pulsebackend-production.up.railway.app/signup", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -105,7 +105,7 @@ const Signup = () => {
     formData.append("image", imageFile);
 
     try {
-      const response = await fetch("http://localhost:5000/upload-image", {
+      const response = await fetch("https://lu-pulsebackend-production.up.railway.app/upload-image", {
         method: "POST",
         body: formData,
       });

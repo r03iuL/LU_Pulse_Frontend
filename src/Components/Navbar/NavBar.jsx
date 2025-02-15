@@ -19,7 +19,7 @@ const NavBar = () => {
     const fetchUserData = async () => {
       try {
         //  Delay fetching user data to ensure authentication is set
-        await new Promise((resolve) => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 10000));
 
         const response = await axiosSecure.get(
           `/users/${encodeURIComponent(currentUser.email)}`

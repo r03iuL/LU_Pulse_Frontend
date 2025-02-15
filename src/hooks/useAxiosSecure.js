@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "https://lu-pulsebackend-production.up.railway.app",
   withCredentials: true, // Ensure cookies are sent in requests
 });
 
@@ -30,7 +30,7 @@ const useAxiosSecure = () => {
             await new Promise((resolve) => setTimeout(resolve, 1500)); // add delay
             // Call backend logout API to clear cookies
             await axios.post(
-              "http://localhost:5000/logout",
+              "https://lu-pulsebackend-production.up.railway.app/logout",
               {},
               { withCredentials: true }
             );

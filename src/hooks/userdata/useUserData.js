@@ -17,7 +17,7 @@ const useUserData = () => {
     const fetchUserData = async () => {
       try {
         // Delay fetching to ensure authentication is set
-        await new Promise((resolve) => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 50000));
 
         const response = await axiosSecure.get(`/users/${encodeURIComponent(currentUser.email)}`);
         
