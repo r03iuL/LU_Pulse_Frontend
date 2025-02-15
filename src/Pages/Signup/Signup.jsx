@@ -10,6 +10,7 @@ const Signup = () => {
   const [userType, setUserType] = useState("");
   const [department, setDepartment] = useState("");
   const [designation, setDesignation] = useState("");
+  const [imagePreview, setImagePreview] = useState(null); // State for image preview
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -120,6 +121,15 @@ const Signup = () => {
     } catch (error) {
       console.error("Error uploading image:", error);
       throw error;
+    }
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImagePreview(URL.createObjectURL(file));
+    } else {
+      setImagePreview(null);
     }
   };
 
@@ -345,7 +355,15 @@ const Signup = () => {
                 name="image"
                 className="input w-full"
                 accept="image/*"
+                onChange={handleFileChange}
               />
+              {imagePreview && (
+                <img
+                  src={imagePreview}
+                  alt="Profile Preview"
+                  className="mt-4 w-full max-h-48 object-cover rounded-md shadow-md"
+                />
+              )}
             </div>
 
             {/* Submit Button */}

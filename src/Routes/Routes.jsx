@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "./../Layouts/MainLasyout"; // Fix typo from MainLasyout to MainLayout
 import Home from "./../Pages/Home/Home";
 import About from "./../Pages/About/About";
-import Events from "./../Pages/Events/Events";
+import Events from "../Pages/Events/Events";
 import Signup from "./../Pages/Signup/Signup";
 import Login from "./../Pages/Login/Login";
 import Notice from "../Pages/Notice/Notice";
@@ -16,6 +16,10 @@ import SuperDashboard from "../Pages/Admin/SuperDashboard/SuperDashboard";
 import NoticeDetails from "../Pages/Notice/NoticeDetails";
 import AdminNotice from "../Pages/Notice/AdminNotice";
 import EditNotice from "../Pages/Notice/EditNotice";
+import ViewEvent from "../Pages/Events/ViewEvent";
+import AdminEvents from "../Pages/Events/AdminEvents";
+import EditEvent from "../Pages/Events/EditEvent";
+import EditProfile from "../Pages/Profile/EditProfile";
 
 const router = createBrowserRouter([
   {
@@ -63,6 +67,22 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: "/events/:id", // Dynamic route for individual notices
+        element: (
+          <PrivateRoute>
+            <ViewEvent />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/adminevents", // Dynamic route for individual notices
+        element: (
+          <PrivateRoute>
+            <AdminEvents />
+          </PrivateRoute>
+        ),
+      },
+      {
         path: "adminnotice", // Dynamic route for individual notices
         element: (
           <PrivateRoute>
@@ -75,6 +95,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <Profile />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "editprofile", // Fix the About Us route to be a direct child of MainLayout
+        element: (
+          <PrivateRoute>
+            <EditProfile />
           </PrivateRoute>
         ),
       },
@@ -99,6 +127,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <CreateEvent />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "editevent/:id", // Fix the About Us route to be a direct child of MainLayout
+        element: (
+          <PrivateRoute>
+            <EditEvent />
           </PrivateRoute>
         ),
       },

@@ -69,7 +69,7 @@ const Dashboard = () => {
 
         {/* Total Events */}
         <div className="bg-white p-6 rounded-xl shadow-lg text-center">
-          <Link to="/events">
+          <Link to="/adminevents">
             <FontAwesomeIcon icon={faCalendar} className="text-4xl text-yellow-500 mb-4" />
             <h3 className="text-2xl font-semibold">Total Events</h3>
             <p className="text-xl font-bold text-gray-700">{loading ? "..." : totalEvents}</p>
@@ -78,7 +78,7 @@ const Dashboard = () => {
 
         {/* Total Users */}
         <div className="bg-white p-6 rounded-xl shadow-lg text-center">
-          <Link to="/members">
+          <Link to="">
             <FontAwesomeIcon icon={faUsers} className="text-4xl text-green-500 mb-4" />
             <h3 className="text-2xl font-semibold">Total Users</h3>
             <p className="text-xl font-bold text-gray-700">{loading ? "..." : totalUsers}</p>
@@ -145,9 +145,9 @@ const Dashboard = () => {
 
           {/* Buttons */}
           <div className="mt-6 flex justify-between gap-4">
-            <Link to="/events" className="bg-yellow-500 text-white p-4 rounded-xl shadow-md hover:bg-yellow-600 flex-1 text-center">
+            <Link to="/adminevents" className="bg-yellow-500 text-white p-4 rounded-xl shadow-md hover:bg-yellow-600 flex-1 text-center">
               <FontAwesomeIcon icon={faCalendar} className="mr-2" />
-              View All Events
+              Manage Events
             </Link>
             <Link to="/createevent" className="bg-yellow-500 text-white p-4 rounded-xl shadow-md hover:bg-yellow-600 flex-1 text-center">
               <FontAwesomeIcon icon={faPlusCircle} className="mr-2" />

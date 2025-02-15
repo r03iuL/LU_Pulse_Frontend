@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext"; 
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
-  const { currentUser } = useAuth(); 
+  const { currentUser } = useAuth();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!currentUser) return;
@@ -17,12 +19,11 @@ const Profile = () => {
         setLoading(true);
         setError("");
 
-        // Fetch user data
         const response = await axiosSecure.get(
-          `/users/${encodeURIComponent(currentUser.email)}`,
+          `/users/${encodeURIComponent(currentUser.email)}`
         );
 
-        setUser(response.data); // Store user data
+        setUser(response.data);
       } catch (err) {
         setError(err.response?.data?.message || "Failed to fetch user data");
         console.error("Error fetching user data:", err);
@@ -53,51 +54,39 @@ const Profile = () => {
         <div className="text-left">
           <div className="mb-4">
             <p className="text-lg font-semibold mb-1">Full Name:</p>
-            <div className="p-4 border border-gray-300 rounded-md">
-              {user.fullName}
-            </div>
+            <div className="p-4 border border-gray-300 rounded-md">{user.fullName}</div>
           </div>
 
           <div className="mb-4">
             <p className="text-lg font-semibold mb-1">ID:</p>
-            <div className="p-4 border border-gray-300 rounded-md">
-              {user.id}
-            </div>
+            <div className="p-4 border border-gray-300 rounded-md">{user.id}</div>
           </div>
 
           <div className="mb-4">
             <p className="text-lg font-semibold mb-1">Email:</p>
-            <div className="p-4 border border-gray-300 rounded-md">
-              {user.email}
-            </div>
+            <div className="p-4 border border-gray-300 rounded-md">{user.email}</div>
           </div>
 
-          {/*  Department Field */}
           <div className="mb-4">
             <p className="text-lg font-semibold mb-1">Department:</p>
-            <div className="p-4 border border-gray-300 rounded-md">
-              {user.department || "N/A"}
-            </div>
+            <div className="p-4 border border-gray-300 rounded-md">{user.department || "N/A"}</div>
           </div>
 
-          {/*  Display designation only for faculty & staff */}
           {user.userType === "faculty" || user.userType === "staff" ? (
-            <div className="mt-4">
+            <div className="mb-4">
               <p className="text-lg font-semibold mb-1">Designation:</p>
-              <div className="p-4 border border-gray-300 rounded-md">
-                {user.designation || "Not Provided"}
-              </div>
+              <div className="p-4 border border-gray-300 rounded-md">{user.designation || "Not Provided"}</div>
             </div>
           ) : null}
         </div>
 
-        {/* Edit Button */}
+        {/* Edit Button - Navigates to Edit Profile Page */}
         <div className="flex justify-center mt-6">
           <button
             className="btn btn-primary px-6 py-2 border border-blue-500 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-            onClick={() => console.log("Edit profile clicked")}
+            onClick={() => navigate("/editprofile")}
           >
-            Edit Info
+            Edit Profile
           </button>
         </div>
       </div>

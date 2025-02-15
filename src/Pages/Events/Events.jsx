@@ -1,87 +1,42 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import axios from "axios";
 
 const Events = () => {
   const [date, setDate] = useState(new Date());
+  const [events, setEvents] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  
-  const [events, setEvents] = useState({
-    "2024-09-18": [
-      {
-        name: "Orientation Program",
-        date: "2024-09-18",
-        time: "10:00 AM",
-        venue: "Main Auditorium",
-        details: "Welcoming ceremony for new students.",
-      },
-      {
-        name: "Campus Tour",
-        date: "2024-09-18",
-        time: "12:00 PM",
-        venue: "University Campus",
-        details: "Guided tour of the university campus.",
-      },
-    ],
-    "2024-09-20": [
-      {
-        name: "Guest Lecture: AI in Education",
-        date: "2024-09-20",
-        time: "2:00 PM",
-        venue: "Room 302, Engineering Building",
-        details: "An insightful lecture on the applications of AI in modern education systems.",
-      },
-    ],
-    "2024-09-22": [
-      {
-        name: "Workshop: Time Management for Students",
-        date: "2024-09-22",
-        time: "9:00 AM",
-        venue: "Library Conference Room",
-        details: "A practical workshop on improving time management skills for students.",
-      },
-      {
-        name: "Football Match: Students vs Faculty",
-        date: "2024-09-22",
-        time: "3:00 PM",
-        venue: "University Football Ground",
-        details: "A fun and competitive football match between students and faculty.",
-      },
-    ],
-    "2024-09-23": [
-      {
-        name: "Coding Bootcamp: Introduction to Web Development",
-        date: "2024-09-23",
-        time: "10:00 AM",
-        venue: "Computer Science Lab",
-        details: "A beginner-friendly workshop on building websites using HTML, CSS, and JavaScript.",
-      },
-      {
-        name: "Open Mic Night",
-        date: "2024-09-23",
-        time: "6:00 PM",
-        venue: "Student Lounge",
-        details: "An open mic night for students to showcase their talents, from poetry to music.",
-      },
-    ],
-    "2024-09-24": [
-      {
-        name: "Career Fair",
-        date: "2024-09-24",
-        time: "10:00 AM",
-        venue: "Main Hall",
-        details: "Meet with potential employers and explore job opportunities at the annual career fair.",
-      },
-      {
-        name: "Photography Exhibition: Student Works",
-        date: "2024-09-24",
-        time: "2:00 PM",
-        venue: "Art Gallery",
-        details: "An exhibition showcasing the best photography work by students from various departments.",
-      },
-    ],
-  });
-  
+  const fetchEvents = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await axios.get("http://localhost:5000/events");
+      const eventsData = response.data;
+
+      const eventsByDate = eventsData.reduce((acc, event) => {
+        const eventDate = event.date.split("T")[0];
+        if (!acc[eventDate]) acc[eventDate] = [];
+        acc[eventDate].push(event);
+        return acc;
+      }, {});
+
+      setEvents(eventsByDate);
+    } catch (err) {
+      setError("Error fetching events");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
 
   const handleDateChange = (newDate) => {
     setDate(newDate);
@@ -97,6 +52,23 @@ const Events = () => {
   const selectedDate = formatDate(date);
   const eventList = events[selectedDate] || [];
 
+  const eventDates = Object.keys(events);
+
+  // Adding a dot indicator for event days
+  const tileContent = ({ date, view }) => {
+    if (view === "month") {
+      const formattedDate = formatDate(date);
+      if (eventDates.includes(formattedDate)) {
+        return (
+          <div className="flex justify-center items-center">
+            <div className="w-3 h-3 bg-red-500 rounded-full mt-1"></div>
+          </div>
+        );
+      }
+    }
+    return null;
+  };
+
   return (
     <div className="bg-slate-200 min-h-screen">
       <h2 className="text-3xl pt-6 font-semibold text-center text-cyan-600">
@@ -109,24 +81,33 @@ const Events = () => {
             onChange={handleDateChange}
             value={date}
             className="shadow-xl rounded-xl border-0 p-4 lg:p-6"
+            tileContent={tileContent} // Adds the event dots
+            tileClassName={({ date, view }) => {
+              const formattedDate = formatDate(date);
+              return view === "month" && eventDates.includes(formattedDate)
+                ? "has-event"
+                : null;
+            }}
           />
         </div>
 
-        {/* Event Viewer Section */}
+        {/* Event List Section */}
         <div className="w-full lg:w-2/3 bg-white shadow-xl rounded-xl p-4 lg:p-6">
-          {eventList.length > 0 ? (
+          {loading ? (
+            <p className="text-lg text-center">Loading events...</p>
+          ) : error ? (
+            <p className="text-lg text-center text-red-500">{error}</p>
+          ) : eventList.length > 0 ? (
             <ul className="list-none">
               {eventList.map((event, index) => (
-                <li key={index} className="mb-6 p-4 border-b border-gray-300">
-                  <h3 className="text-lg lg:text-xl font-bold">{event.name}</h3>
-                  <div className="text-sm lg:text-base text-gray-500 mt-2">
-                    <p>Date: {event.date}</p>
-                    <p>Time: {event.time}</p>
-                    <p>Venue: {event.venue}</p>
-                  </div>
-                  <div className="mt-2 bg-slate-100 p-4 rounded-md">
-                    <p className="text-gray-800">{event.details}</p>
-                  </div>
+                <li key={index} className="mb-3 p-3 border-b border-gray-300 hover:bg-gray-100 transition duration-200 rounded-lg">
+                  <Link to={`/events/${event._id}`} className="block text-md font-bold text-blue-600 hover:underline">
+                    {event.name}
+                  </Link>
+                  <p className="text-sm text-gray-600 flex justify-between">
+                    <span>{event.date} • {event.time}</span>
+                    <span className="text-blue-500">{event.venue}</span>
+                  </p>
                 </li>
               ))}
             </ul>

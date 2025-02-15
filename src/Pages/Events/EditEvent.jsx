@@ -1,8 +1,9 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 
-const CreateEvent = () => {
+const EditEvent = () => {
+  const { id } = useParams(); // Get event ID from URL
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
   const [event, setEvent] = useState({
@@ -11,13 +12,28 @@ const CreateEvent = () => {
     time: "",
     venue: "",
     details: "",
-    image: null, // Store selected image file
+    image: null,
   });
 
-  const [imagePreview, setImagePreview] = useState(null); // Image preview before upload
+  const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  // Fetch event details when page loads
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        const response = await axiosSecure.get(`/events/${id}`);
+        setEvent(response.data);
+        setImagePreview(response.data.image); // Set existing image preview
+      } catch (error) {
+        setErrorMessage("Error fetching event details.");
+      }
+    };
+
+    fetchEvent();
+  }, [id, axiosSecure]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,11 +49,11 @@ const CreateEvent = () => {
       ...event,
       image: file,
     });
-    setImagePreview(URL.createObjectURL(file)); // Show preview before upload
+    setImagePreview(URL.createObjectURL(file));
   };
 
   const uploadImage = async () => {
-    if (!event.image) return null;
+    if (!event.image || typeof event.image === "string") return event.image; // Keep existing image
 
     setUploading(true);
     const formData = new FormData();
@@ -49,7 +65,7 @@ const CreateEvent = () => {
       });
 
       setUploading(false);
-      return response.data.imageUrl; // Return uploaded image URL
+      return response.data.imageUrl;
     } catch (error) {
       setUploading(false);
       console.error("Error uploading image:", error);
@@ -62,23 +78,23 @@ const CreateEvent = () => {
     setLoading(true);
     setErrorMessage("");
 
-    const imageUrl = await uploadImage(); // Upload image first
-    if (!imageUrl) {
+    const imageUrl = await uploadImage(); // Upload image if changed
+    if (event.image && !imageUrl) {
       setErrorMessage("Failed to upload image. Please try again.");
       setLoading(false);
       return;
     }
 
     try {
-      const eventData = { ...event, image: imageUrl }; // Add image URL to event data
-      const response = await axiosSecure.post("/events", eventData);
+      const eventData = { ...event, image: imageUrl };
+      const response = await axiosSecure.put(`/events/${id}`, eventData);
 
-      if (response.data.message === "Event created successfully") {
-        alert("Event created successfully!");
-        navigate("/events");
+      if (response.data.message === "Event updated successfully") {
+        alert("Event updated successfully!");
+        navigate("/adminevents");
       }
     } catch (error) {
-      setErrorMessage(error.response?.data?.message || "Error creating event.");
+      setErrorMessage(error.response?.data?.message || "Error updating event.");
     } finally {
       setLoading(false);
     }
@@ -87,7 +103,7 @@ const CreateEvent = () => {
   return (
     <div className="bg-gray-100 min-h-screen px-4 sm:px-6 lg:px-20 py-10">
       <h2 className="text-3xl font-semibold text-center text-cyan-600 mb-8">
-        Create New Event
+        Edit Event
       </h2>
 
       <div className="bg-white p-6 rounded-xl shadow-lg max-w-lg mx-auto">
@@ -179,7 +195,6 @@ const CreateEvent = () => {
               accept="image/*"
               onChange={handleFileChange}
               className="w-full px-4 py-2 mt-2 border rounded-md focus:ring-2 focus:ring-cyan-600"
-              required
             />
             {imagePreview && (
               <img
@@ -195,7 +210,7 @@ const CreateEvent = () => {
             className="w-full py-3 bg-cyan-600 text-white rounded-md hover:bg-cyan-700"
             disabled={loading || uploading}
           >
-            {loading ? "Creating Event..." : "Create Event"}
+            {loading ? "Updating Event..." : "Update Event"}
           </button>
         </form>
       </div>
@@ -203,4 +218,4 @@ const CreateEvent = () => {
   );
 };
 
-export default CreateEvent;
+export default EditEvent;

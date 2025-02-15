@@ -15,6 +15,7 @@ const CreateNotice = () => {
     department: [],
   });
   const [uploading, setUploading] = useState(false);
+  const [imagePreview, setImagePreview] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,10 +39,12 @@ const CreateNotice = () => {
   };
 
   const handleFileChange = (e) => {
+    const file = e.target.files[0];
     setNotice({
       ...notice,
-      image: e.target.files[0], 
+      image: file,
     });
+    setImagePreview(URL.createObjectURL(file));
   };
 
   const uploadImage = async () => {
@@ -202,6 +205,11 @@ const CreateNotice = () => {
               className="w-full px-4 py-2 mt-2 border rounded-md focus:ring-2 focus:ring-cyan-600"
               required
             />
+            {imagePreview && (
+              <div className="mt-4">
+                <img src={imagePreview} alt="Image Preview" className="w-full h-auto rounded-md" />
+              </div>
+            )}
           </div>
 
           {/* Description */}

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Add useNavigate
-import { faSearch, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faEdit, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useUserData from "../../hooks/userdata/useUserData";
@@ -153,7 +153,14 @@ const AdminNotice = () => {
 
       {/* Notices List */}
       <div className="bg-white p-10 rounded-xl shadow-lg">
-        <h3 className="text-xl font-semibold mb-4">All Notices</h3>
+        <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-xl font-semibold">All Notices</h3>
+                  <Link to="/createnotice" className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+                    <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                    Create Notice
+                  </Link>
+                </div>
+
         <ul>
           {loading ? (
             <p>Loading notices...</p>
