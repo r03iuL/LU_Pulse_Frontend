@@ -20,6 +20,8 @@ import ViewEvent from "../Pages/Events/ViewEvent";
 import AdminEvents from "../Pages/Events/AdminEvents";
 import EditEvent from "../Pages/Events/EditEvent";
 import EditProfile from "../Pages/Profile/EditProfile";
+import ManageUsers from "../Pages/Admin/Users/ManageUsers";
+import ManageAdmins from "../Pages/Admin/Users/ManageAdmins";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +41,22 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <Events />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "manageusers", // Fix the About Us route to be a direct child of MainLayout
+        element: (
+          <PrivateRoute>
+            <ManageUsers />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "manageadmins", // Fix the About Us route to be a direct child of MainLayout
+        element: (
+          <PrivateRoute>
+            <ManageAdmins />
           </PrivateRoute>
         ),
       },
