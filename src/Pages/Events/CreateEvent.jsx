@@ -62,15 +62,10 @@ const CreateEvent = () => {
     setLoading(true);
     setErrorMessage("");
 
-    const imageUrl = await uploadImage(); // Upload image first
-    if (!imageUrl) {
-      setErrorMessage("Failed to upload image. Please try again.");
-      setLoading(false);
-      return;
-    }
+    const imageUrl = await uploadImage(); // Upload image first if available
 
     try {
-      const eventData = { ...event, image: imageUrl }; // Add image URL to event data
+      const eventData = { ...event, image: imageUrl || null }; // Add image URL to event data if available
       const response = await axiosSecure.post("/events", eventData);
 
       if (response.data.message === "Event created successfully") {
@@ -179,7 +174,6 @@ const CreateEvent = () => {
               accept="image/*"
               onChange={handleFileChange}
               className="w-full px-4 py-2 mt-2 border rounded-md focus:ring-2 focus:ring-cyan-600"
-              required
             />
             {imagePreview && (
               <img

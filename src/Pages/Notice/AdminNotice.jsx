@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Add useNavigate
-import { faSearch, faEdit, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faSearch,
+  faEdit,
+  faTrash,
+  faPlus,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useUserData from "../../hooks/userdata/useUserData";
@@ -14,7 +19,7 @@ const AdminNotice = () => {
   const [selectedDepartment, setSelectedDepartment] = useState("all");
   const [selectedAudience, setSelectedAudience] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
-  const noticesPerPage = 5;
+  const noticesPerPage = 10;
 
   const navigate = useNavigate(); // Initialize navigation
 
@@ -22,7 +27,10 @@ const AdminNotice = () => {
     const fetchNotices = async () => {
       try {
         const response = await axiosSecure.get("/notices");
-        setNotices(response.data);
+        const sortedNotices = response.data.sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        );
+        setNotices(sortedNotices);
       } catch (error) {
         console.error("Error fetching notices:", error);
       }
@@ -87,7 +95,9 @@ const AdminNotice = () => {
     <div className="bg-gray-100 min-h-screen max-w-8xl px-4 sm:px-6 lg:px-20 py-10 mx-auto">
       {/* Header & Search Bar */}
       <div className="items-center mb-6">
-        <h3 className="my-4 text-center text-4xl font-semibold text-blue-600">Manage Notices</h3>
+        <h3 className="my-4 text-center text-4xl font-semibold text-blue-600">
+          Manage Notices
+        </h3>
         <div className="relative">
           <input
             type="text"
@@ -107,12 +117,9 @@ const AdminNotice = () => {
         userData?.adminRole === "superadmin") && (
         <div className="flex justify-center">
           <div className="w-full md:w-2/3 lg:w-full mb-6 p-6 bg-white shadow-lg rounded-xl">
-            <h3 className="text-xl font-semibold mb-4 text-center">
-              Filter Notices
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex flex-wrap justify-between gap-6">
               {/* Department Filter */}
-              <div className="text-center">
+              <div className="text-center flex-1 min-w-[200px]">
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Filter by Department
                 </label>
@@ -131,7 +138,7 @@ const AdminNotice = () => {
               </div>
 
               {/* Audience Filter */}
-              <div className="text-center">
+              <div className="text-center flex-1 min-w-[200px]">
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Filter by Target Audience
                 </label>
@@ -146,6 +153,24 @@ const AdminNotice = () => {
                   <option value="Staff">Staff</option>
                 </select>
               </div>
+
+              {/* Category Filter */}
+              <div className="text-center flex-1 min-w-[200px]">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Filter by Category
+                </label>
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="all">All Categories</option>
+                  <option value="General">General</option>
+                  <option value="Academic">Academic</option>
+                  <option value="Events">Events</option>
+                  <option value="Transport">Transport</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
@@ -154,12 +179,15 @@ const AdminNotice = () => {
       {/* Notices List */}
       <div className="bg-white p-10 rounded-xl shadow-lg">
         <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-xl font-semibold">All Notices</h3>
-                  <Link to="/createnotice" className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
-                    <FontAwesomeIcon icon={faPlus} className="mr-2" />
-                    Create Notice
-                  </Link>
-                </div>
+          <h3 className="text-xl font-semibold">All Notices</h3>
+          <Link
+            to="/createnotice"
+            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+          >
+            <FontAwesomeIcon icon={faPlus} className="mr-2" />
+            Create Notice
+          </Link>
+        </div>
 
         <ul>
           {loading ? (

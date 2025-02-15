@@ -16,6 +16,8 @@ const EditNotice = () => {
     targetAudience: [],
     department: [],
   });
+
+  const [imagePreview, setImagePreview] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -23,8 +25,9 @@ const EditNotice = () => {
   useEffect(() => {
     const fetchNotice = async () => {
       try {
-        const response = await axiosSecure.get(`/notice/${id}`);
+        const response = await axiosSecure.get(`/notices/${id}`);
         setNotice(response.data);
+        setImagePreview(response.data.image); // Set existing image as preview
         setLoading(false);
       } catch (error) {
         console.error("Error fetching notice:", error);
@@ -56,10 +59,17 @@ const EditNotice = () => {
   };
 
   const handleFileChange = (e) => {
-    setNotice({
-      ...notice,
-      image: e.target.files[0], // Store file object temporarily
-    });
+    const file = e.target.files[0];
+
+    if (file) {
+      setNotice({
+        ...notice,
+        image: file,
+      });
+
+      // Show preview of selected image
+      setImagePreview(URL.createObjectURL(file));
+    }
   };
 
   const uploadImage = async () => {
@@ -98,7 +108,7 @@ const EditNotice = () => {
       const response = await axiosSecure.put(`/notices/${id}`, updatedNotice);
       if (response.data.message === "Notice updated successfully") {
         alert("Notice updated successfully");
-        navigate("/admin-notice");
+        navigate("/adminnotice");
       }
     } catch (error) {
       console.error("Error updating notice:", error);
@@ -208,7 +218,7 @@ const EditNotice = () => {
             </div>
           </div>
 
-          {/* Image Upload */}
+          {/* Image Upload with Preview */}
           <div className="mb-4">
             <label className="block text-sm font-semibold text-gray-700">
               Upload Image (Leave empty to keep existing)
@@ -220,10 +230,17 @@ const EditNotice = () => {
               onChange={handleFileChange}
               className="w-full px-4 py-2 mt-2 border rounded-md focus:ring-2 focus:ring-cyan-600"
             />
+            {imagePreview && (
+              <img
+                src={imagePreview}
+                alt="Preview"
+                className="mt-4 w-full h-48 object-cover rounded-md shadow-md"
+              />
+            )}
           </div>
 
-          {/* Description */}
-          <div className="mb-4">
+           {/* Description */}
+           <div className="mb-4">
             <label className="block text-sm font-semibold text-gray-700">
               Description
             </label>
@@ -231,11 +248,13 @@ const EditNotice = () => {
               name="description"
               value={notice.description}
               onChange={handleChange}
-              className="w-full px-4 py-10 mt-2 border rounded-md focus:ring-2 focus:ring-cyan-600"
+              rows="4"
+              className="w-full px-4 py-2 mt-2 border rounded-md focus:ring-2 focus:ring-cyan-600"
               required
             />
           </div>
 
+          {/* Submit Button */}
           <button
             type="submit"
             className="w-full py-3 bg-cyan-600 text-white rounded-md hover:bg-cyan-700"

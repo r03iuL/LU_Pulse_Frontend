@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import axios from "axios";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const Events = () => {
+  const axiosSecure = useAxiosSecure();
   const [date, setDate] = useState(new Date());
   const [events, setEvents] = useState({});
   const [loading, setLoading] = useState(false);
@@ -15,7 +16,7 @@ const Events = () => {
     setError(null);
 
     try {
-      const response = await axios.get("http://localhost:5000/events");
+      const response = await axiosSecure.get("/events");
       const eventsData = response.data;
 
       const eventsByDate = eventsData.reduce((acc, event) => {

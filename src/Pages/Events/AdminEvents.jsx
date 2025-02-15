@@ -12,14 +12,15 @@ const AdminEvents = () => {
   const [events, setEvents] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const eventsPerPage = 5; // Number of events per page
+  const eventsPerPage = 10; // Number of events per page
 
   // Fetch events from backend
   useEffect(() => {
     const fetchEvents = async () => {
       try {
         const response = await axiosSecure.get("/events");
-        setEvents(response.data);
+        const sortedEvents = response.data.sort((a, b) => new Date(a.date) - new Date(b.date));
+        setEvents(sortedEvents);
       } catch (error) {
         console.error("Error fetching events:", error);
       }

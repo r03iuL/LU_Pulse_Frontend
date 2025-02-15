@@ -1,12 +1,19 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUsers, faCalendar, faFileAlt, faUserShield, faUserPlus, faPlus, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faUsers,
+  faCalendar,
+  faFileAlt,
+  faUserShield,
+  faPlus,
+  faPlusCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-import useAxiosSecure from './../../../hooks/useAxiosSecure';
+import useAxiosSecure from "./../../../hooks/useAxiosSecure";
 
 const SuperDashboard = () => {
   const axiosSecure = useAxiosSecure();
-  
+
   // State for dynamic data
   const [totalNotices, setTotalNotices] = useState(0);
   const [totalUsers, setTotalUsers] = useState(0);
@@ -38,9 +45,8 @@ const SuperDashboard = () => {
         setTotalAdmins(adminsRes.data.length);
 
         // Set recent notices & events (fetching latest 3)
-        setRecentNotices(noticesRes.data.slice(-3).reverse());
-        setRecentEvents(eventsRes.data.slice(-3).reverse());
-
+        setRecentNotices(noticesRes.data.slice(-5).reverse());
+        setRecentEvents(eventsRes.data.slice(-5).reverse());
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
         setError("Failed to fetch dashboard data.");
@@ -54,7 +60,9 @@ const SuperDashboard = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen px-4 sm:px-6 lg:px-20 py-10">
-      <h2 className="text-3xl font-semibold text-center text-cyan-600 mb-8">Super Admin Dashboard</h2>
+      <h2 className="text-3xl font-semibold text-center text-cyan-600 mb-8">
+        Super Admin Dashboard
+      </h2>
 
       {loading ? (
         <p className="text-center text-lg">Loading dashboard data...</p>
@@ -65,17 +73,25 @@ const SuperDashboard = () => {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
             {/* Total Notices */}
             <div className="bg-white p-6 rounded-xl shadow-lg text-center">
-              <Link to="/notice">
-                <FontAwesomeIcon icon={faFileAlt} className="text-4xl text-blue-500 mb-4" />
+              <Link to="/adminnotice">
+                <FontAwesomeIcon
+                  icon={faFileAlt}
+                  className="text-4xl text-blue-500 mb-4"
+                />
                 <h3 className="text-2xl font-semibold">Total Notices</h3>
-                <p className="text-xl font-bold text-gray-700">{totalNotices}</p>
+                <p className="text-xl font-bold text-gray-700">
+                  {totalNotices}
+                </p>
               </Link>
             </div>
 
             {/* Total Events */}
             <div className="bg-white p-6 rounded-xl shadow-lg text-center">
-              <Link to="/events">
-                <FontAwesomeIcon icon={faCalendar} className="text-4xl text-yellow-500 mb-4" />
+              <Link to="/adminevents">
+                <FontAwesomeIcon
+                  icon={faCalendar}
+                  className="text-4xl text-yellow-500 mb-4"
+                />
                 <h3 className="text-2xl font-semibold">Total Events</h3>
                 <p className="text-xl font-bold text-gray-700">{totalEvents}</p>
               </Link>
@@ -84,7 +100,10 @@ const SuperDashboard = () => {
             {/* Total Users */}
             <div className="bg-white p-6 rounded-xl shadow-lg text-center">
               <Link to="/manageusers">
-                <FontAwesomeIcon icon={faUsers} className="text-4xl text-green-500 mb-4" />
+                <FontAwesomeIcon
+                  icon={faUsers}
+                  className="text-4xl text-green-500 mb-4"
+                />
                 <h3 className="text-2xl font-semibold">Total Users</h3>
                 <p className="text-xl font-bold text-gray-700">{totalUsers}</p>
               </Link>
@@ -93,7 +112,10 @@ const SuperDashboard = () => {
             {/* Total Admins */}
             <div className="bg-white p-6 rounded-xl shadow-lg text-center">
               <Link to="/manageadmins">
-                <FontAwesomeIcon icon={faUserShield} className="text-4xl text-purple-500 mb-4" />
+                <FontAwesomeIcon
+                  icon={faUserShield}
+                  className="text-4xl text-purple-500 mb-4"
+                />
                 <h3 className="text-2xl font-semibold">Total Admins</h3>
                 <p className="text-xl font-bold text-gray-700">{totalAdmins}</p>
               </Link>
@@ -107,7 +129,10 @@ const SuperDashboard = () => {
               <ul>
                 {recentNotices.map((notice) => (
                   <li key={notice._id} className="mb-4">
-                    <Link to={`/notices/${notice._id}`} className="text-blue-600 hover:underline">
+                    <Link
+                      to={`/notice/${notice._id}`}
+                      className="text-blue-600 hover:underline"
+                    >
                       {notice.title}
                     </Link>
                     <p className="text-sm text-gray-500">
@@ -117,11 +142,17 @@ const SuperDashboard = () => {
                 ))}
               </ul>
               <div className="mt-6 flex justify-between gap-4">
-                <Link to="/notice" className="bg-blue-500 text-white p-4 rounded-xl shadow-md hover:bg-blue-600 flex-1 text-center">
+                <Link
+                  to="/adminnotice"
+                  className="bg-blue-500 text-white p-4 rounded-xl shadow-md hover:bg-blue-600 flex-1 text-center"
+                >
                   <FontAwesomeIcon icon={faFileAlt} className="mr-2" />
                   View All Notices
                 </Link>
-                <Link to="/createnotice" className="bg-blue-500 text-white p-4 rounded-xl shadow-md hover:bg-blue-600 flex-1 text-center">
+                <Link
+                  to="/createnotice"
+                  className="bg-blue-500 text-white p-4 rounded-xl shadow-md hover:bg-blue-600 flex-1 text-center"
+                >
                   <FontAwesomeIcon icon={faPlus} className="mr-2" />
                   Create New Notice
                 </Link>
@@ -134,21 +165,31 @@ const SuperDashboard = () => {
               <ul>
                 {recentEvents.map((event) => (
                   <li key={event._id} className="mb-4">
-                    <Link to={`/events/${event._id}`} className="text-blue-600 hover:underline">
+                    <Link
+                      to={`/events/${event._id}`}
+                      className="text-blue-600 hover:underline"
+                    >
                       {event.name}
                     </Link>
                     <p className="text-sm text-gray-500">
-                      {new Date(event.date).toLocaleDateString()} at {event.venue}
+                      {new Date(event.date).toLocaleDateString()} at{" "}
+                      {event.venue}
                     </p>
                   </li>
                 ))}
               </ul>
               <div className="mt-6 flex justify-between gap-4">
-                <Link to="/events" className="bg-yellow-500 text-white p-4 rounded-xl shadow-md hover:bg-yellow-600 flex-1 text-center">
+                <Link
+                  to="/adminevents"
+                  className="bg-yellow-500 text-white p-4 rounded-xl shadow-md hover:bg-yellow-600 flex-1 text-center"
+                >
                   <FontAwesomeIcon icon={faCalendar} className="mr-2" />
                   View All Events
                 </Link>
-                <Link to="/createevent" className="bg-yellow-500 text-white p-4 rounded-xl shadow-md hover:bg-yellow-600 flex-1 text-center">
+                <Link
+                  to="/createevent"
+                  className="bg-yellow-500 text-white p-4 rounded-xl shadow-md hover:bg-yellow-600 flex-1 text-center"
+                >
                   <FontAwesomeIcon icon={faPlusCircle} className="mr-2" />
                   Create New Event
                 </Link>

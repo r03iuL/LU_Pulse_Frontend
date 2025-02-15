@@ -71,20 +71,24 @@ const CreateNotice = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const imageUrl = await uploadImage();
-    if (!imageUrl) {
-      alert("Failed to upload image. Please try again.");
+    if (notice.department.length === 0) {
+      alert("Please select at least one department.");
+      return;
+    }
+    if (notice.targetAudience.length === 0) {
+      alert("Please select at least one target audience.");
       return;
     }
 
-    const noticeData = { ...notice, image: imageUrl };
+    const imageUrl = await uploadImage();
+    const noticeData = { ...notice, image: imageUrl || notice.image };
     console.log("Notice Data:", noticeData);
 
     try {
       const response = await axiosSecure.post("/notices", noticeData);
       if (response.data.message === "Notice created successfully") {
         alert("Notice created successfully");
-        navigate("/notice");
+        navigate("/adminnotice");
       }
     } catch (error) {
       console.error("Error creating notice:", error);
@@ -203,7 +207,6 @@ const CreateNotice = () => {
               accept="image/*"
               onChange={handleFileChange}
               className="w-full px-4 py-2 mt-2 border rounded-md focus:ring-2 focus:ring-cyan-600"
-              required
             />
             {imagePreview && (
               <div className="mt-4">

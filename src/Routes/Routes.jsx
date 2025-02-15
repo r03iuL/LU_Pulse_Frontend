@@ -69,7 +69,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "notice/:id", // Dynamic route for individual notices
+        path: "notices/:id", // Dynamic route for individual notices
         element: (
           <PrivateRoute>
             <NoticeDetails />
