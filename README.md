@@ -1,3 +1,4 @@
+![Screenshot](./src/assets/Screenshot.png)
 # LU Pulse 🔔
 
 LU Pulse is a Notice Board application designed for Leading University (LU), providing official notices, announcements, calendar integration, and more.

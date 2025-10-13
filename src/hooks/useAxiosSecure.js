@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 const axiosInstance = axios.create({
-  baseURL: "https://lu-pulsebackend-production.up.railway.app",
+  baseURL: "https://lu-pulse-backend.onrender.com",
   withCredentials: true, // Ensure cookies are sent in requests
 });
 
@@ -18,7 +18,10 @@ const useAxiosSecure = () => {
       async (error) => {
         console.log(error.config.url);
         // Prevent redirecting if it's a login or signup request
-        if (error.config.url.endsWith("/login") || error.config.url.endsWith("/signup")) {
+        if (
+          error.config.url.endsWith("/login") ||
+          error.config.url.endsWith("/signup")
+        ) {
           return Promise.reject(error);
         }
 
@@ -26,11 +29,10 @@ const useAxiosSecure = () => {
           console.error("Unauthorized request. Logging out and redirecting.");
 
           try {
-
             await new Promise((resolve) => setTimeout(resolve, 1500)); // add delay
             // Call backend logout API to clear cookies
             await axios.post(
-              "https://lu-pulsebackend-production.up.railway.app/logout",
+              "https://lu-pulse-backend.onrender.com/logout",
               {},
               { withCredentials: true }
             );
@@ -51,7 +53,7 @@ const useAxiosSecure = () => {
     );
 
     return () => {
-      axiosInstance.interceptors.response.eject(interceptor); 
+      axiosInstance.interceptors.response.eject(interceptor);
     };
   }, [logout, navigate]);
 

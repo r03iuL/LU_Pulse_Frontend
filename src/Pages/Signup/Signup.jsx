@@ -23,7 +23,7 @@ const Signup = () => {
     const confirmPassword = form.confirmPassword.value;
     const userType = form.userType.value;
     const department = form.department.value;
-    const image = form.image.files[0]; 
+    const image = form.image.files[0];
 
     // Set designation based on userType
     const finalDesignation = userType === "student" ? "Student" : designation;
@@ -44,7 +44,7 @@ const Signup = () => {
         // Upload the image if it exists
         let imageUrl = null;
         if (image) {
-          imageUrl = await uploadImage(image); 
+          imageUrl = await uploadImage(image);
         }
 
         // Prepare user data with image URL
@@ -54,20 +54,23 @@ const Signup = () => {
           email,
           userType,
           department,
-          image: imageUrl || null, 
+          image: imageUrl || null,
           designation: finalDesignation,
         };
 
         console.log("User Data:", userData);
 
         // Send the user data to the backend /signup endpoint
-        const response = await fetch("https://lu-pulsebackend-production.up.railway.app/signup", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(userData), // Send the user data as JSON
-        });
+        const response = await fetch(
+          "https://lu-pulse-backend.onrender.com/signup",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userData), // Send the user data as JSON
+          }
+        );
 
         console.log("Signup Response:", response);
         const data = await response.json();
@@ -77,7 +80,7 @@ const Signup = () => {
 
         if (data.message === "User registered successfully") {
           const modal = document.getElementById("my_modal_2");
-          modal.showModal(); 
+          modal.showModal();
           console.log("User Data from response:", data.user);
 
           // Redirect to login page after signup
@@ -105,10 +108,13 @@ const Signup = () => {
     formData.append("image", imageFile);
 
     try {
-      const response = await fetch("https://lu-pulsebackend-production.up.railway.app/upload-image", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        "https://lu-pulse-backend.onrender.com/upload-image",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       const data = await response.json();
 
