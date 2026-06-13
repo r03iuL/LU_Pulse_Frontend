@@ -17,10 +17,11 @@ const useAxiosSecure = () => {
       (response) => response,
       async (error) => {
         console.log(error.config.url);
-        // Prevent redirecting if it's a login or signup request
+        // Prevent redirecting if it's a login, signup, or user data request
         if (
           error.config.url.endsWith("/login") ||
-          error.config.url.endsWith("/signup")
+          error.config.url.endsWith("/signup") ||
+          error.config.url.includes("/users/")
         ) {
           return Promise.reject(error);
         }

@@ -22,7 +22,7 @@ const NavBar = () => {
 
   const handleLogout = async () => {
     try {
-      await axiosSecure.post("/logout", {});
+      await axiosSecure.post("/auth/logout", {});
       await logout();
       navigate("/login");
     } catch (error) {
