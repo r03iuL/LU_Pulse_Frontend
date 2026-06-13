@@ -38,10 +38,15 @@ const Login = () => {
         emailVerified: user.emailVerified,
       };
 
-      //API call to generate JWT token
-      axiosSecure
-        .post("/auth/login",  payload)
-        .then((res) => console.log(res.data));
+      // API call to generate JWT token - await to ensure cookie is set before redirect
+      setLoading(true);
+      try {
+        await axiosSecure.post("/auth/login", payload);
+      } catch (backendError) {
+        console.error("Backend login failed:", backendError);
+        setError("Login successful but session creation failed. Please try again.");
+        return;
+      }
 
       // Redirect to another page after successful login
       navigate("/"); // Assuming you want to navigate to a dashboard page

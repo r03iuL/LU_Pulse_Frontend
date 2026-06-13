@@ -14,7 +14,7 @@ const useUserData = () => {
       return;
     }
 
-    const fetchUserData = async () => {
+    const fetchUserData = async (retryCount = 0) => {
       try {
         const cachedUserData = localStorage.getItem("userData");
         if (cachedUserData) {
@@ -31,6 +31,16 @@ const useUserData = () => {
       } catch (error) {
         if (error.response?.status === 401 || error.response?.status === 403) {
           console.warn("Unauthorized request. User might be logged out.");
+          
+          // Clear stale cache on auth errors
+          localStorage.removeItem("userData");
+          
+          // Retry once after a short delay to handle race conditions
+          if (retryCount < 1) {
+            console.log("Retrying user data fetch...");
+            await new Promise((resolve) => setTimeout(resolve, 500));
+            return fetchUserData(retryCount + 1);
+          }
         } else {
           console.error("Error fetching user data:", error.response?.data?.message || error.message);
         }
