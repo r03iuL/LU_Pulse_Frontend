@@ -1,19 +1,16 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const Login = () => {
-  const { login } = useAuth(); // Access the login method from AuthContext
+  const { login } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const axiosSecure = useAxiosSecure();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Access email and password directly from the form
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
@@ -22,31 +19,26 @@ const Login = () => {
       setLoading(true);
       setError("");
 
-      // Call the login method from AuthContext
       const userCredential = await login(email, password);
       const user = userCredential.user;
-   
+
       // Check if the email is verified
       if (!user.emailVerified) {
         setError("Please verify your email before logging in.");
-        return; // Stop here if the email is not verified
+        return;
       }
 
-      const payload = {
-        uid: user.uid,
-        email: user.email,
-        emailVerified: user.emailVerified,
-      };
-
-      //API call to generate JWT token
-      axiosSecure
-        .post("/login",  payload)
-        .then((res) => console.log(res.data));
-
-      // Redirect to another page after successful login
-      navigate("/"); // Assuming you want to navigate to a dashboard page
-    } catch (error) {
-      setError(`Login failed: ${error.message}`);
+      // Redirect after successful login
+      navigate("/");
+    } catch (err) {
+      // Handle specific backend error codes
+      if (err.response?.status === 404) {
+        setError("No account found with this email. Please sign up first.");
+      } else if (err.response?.status === 403) {
+        setError("Please verify your email before logging in.");
+      } else {
+        setError(`Login failed: ${err.message}`);
+      }
     } finally {
       setLoading(false);
     }

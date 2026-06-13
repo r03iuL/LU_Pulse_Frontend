@@ -1,50 +1,28 @@
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { useAuth } from "../../context/AuthContext";
+import useUserData from "../../hooks/userdata/useUserData";
+
 import { useState, useEffect } from "react";
 import { faUser } from "@fortawesome/free-solid-svg-icons/faUser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const NavBar = () => {
   const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
-  const [userImage, setUserImage] = useState(null);
+  const { userData } = useUserData();
   const [adminRole, setAdminRole] = useState(null);
   const axiosSecure = useAxiosSecure();
 
-  // Fetch user data from MongoDB
   useEffect(() => {
-    if (!currentUser || !currentUser.email) return; // Ensure user is logged in
-
-    const fetchUserData = async () => {
-      try {
-        //  Delay fetching user data to ensure authentication is set
-        await new Promise((resolve) => setTimeout(resolve, 10000));
-
-        const response = await axiosSecure.get(
-          `/users/${encodeURIComponent(currentUser.email)}`
-        );
-
-        setUserImage(response.data.image);
-        setAdminRole(response.data.adminRole);
-      } catch (error) {
-        if (error.response?.status === 401 || error.response?.status === 403) {
-          console.warn("Unauthorized request. User might be logged out.");
-        } else {
-          console.error(
-            "Error fetching user image:",
-            error.response?.data?.message || error.message
-          );
-        }
-      }
-    };
-
-    fetchUserData();
-  }, [currentUser, axiosSecure]);
+    if (userData) {
+      setAdminRole(userData.adminRole);
+    }
+  }, [userData]);
 
   const handleLogout = async () => {
     try {
-      await axiosSecure.post("/logout", {});
+      await axiosSecure.post("/auth/logout", {});
       await logout();
       navigate("/login");
     } catch (error) {
@@ -164,9 +142,9 @@ const NavBar = () => {
         {currentUser ? (
           <>
             <Link to="/profile" className="btn btn-ghost font-semibold ">
-              {userImage ? (
+              {userData && userData.image ? (
                 <img
-                  src={userImage}
+                  src={userData.image}
                   alt="User Profile"
                   className="h-10 rounded-full "
                 />

@@ -63,7 +63,7 @@ const EditProfile = () => {
     formData.append("image", image);
 
     try {
-      const response = await axiosSecure.post("/upload-image", formData, {
+      const response = await axiosSecure.post("/upload/upload-image", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       return response.data.imageUrl;
@@ -111,7 +111,7 @@ const EditProfile = () => {
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
-    <div className="max-w-lg mx-auto bg-white p-6 rounded-xl shadow-lg">
+    <div className="max-w-lg mx-auto bg-white p-10 my-10 rounded-xl shadow-lg">
       <h2 className="text-2xl font-semibold mb-4 text-center">Edit Profile</h2>
 
       {/* Full Name Field */}

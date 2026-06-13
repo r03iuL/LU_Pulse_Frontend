@@ -1,10 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const Signup = () => {
   const { signup, logout } = useAuth(); // Access the signup method from AuthContext
   const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [userType, setUserType] = useState("");
@@ -60,20 +62,11 @@ const Signup = () => {
 
         console.log("User Data:", userData);
 
-        // Send the user data to the backend /signup endpoint
-        const response = await fetch(
-          "https://lu-pulse-backend.onrender.com/signup",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(userData), // Send the user data as JSON
-          }
-        );
+        // Send the user data to the backend /users/signup endpoint
+        const response = await axiosSecure.post("/users/signup", userData);
 
         console.log("Signup Response:", response);
-        const data = await response.json();
+        const data = response.data;
         console.log("Signup Data:", data);
         // Call the signup method from AuthContext
         await signup(email, password);
@@ -108,15 +101,11 @@ const Signup = () => {
     formData.append("image", imageFile);
 
     try {
-      const response = await fetch(
-        "https://lu-pulse-backend.onrender.com/upload-image",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const response = await axiosSecure.post("/upload/upload-image", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
-      const data = await response.json();
+      const data = response.data;
 
       if (data.success) {
         console.log("Image uploaded successfully:", data.imageUrl);

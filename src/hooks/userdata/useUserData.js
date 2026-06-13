@@ -4,30 +4,49 @@ import { useAuth } from "../../context/AuthContext";
 
 const useUserData = () => {
   const axiosSecure = useAxiosSecure();
-  const { currentUser } = useAuth();
+  const { currentUser, jwtReady } = useAuth();
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // No user — nothing to fetch.
     if (!currentUser || !currentUser.email) {
       setLoading(false);
       return;
     }
 
+    // JWT cookie not confirmed yet — wait; keep loading=true so consumers
+    // know data is still incoming.
+    if (!jwtReady) {
+      return;
+    }
+
     const fetchUserData = async () => {
       try {
-        // Delay fetching to ensure authentication is set
-        await new Promise((resolve) => setTimeout(resolve, 50000));
+        const cachedUserData = localStorage.getItem("userData");
+        if (cachedUserData) {
+          setUserData(JSON.parse(cachedUserData));
+          setLoading(false);
+          return;
+        }
 
-        const response = await axiosSecure.get(`/users/${encodeURIComponent(currentUser.email)}`);
-        
-        // Store all user details
+        const response = await axiosSecure.get(
+          `/users/${encodeURIComponent(currentUser.email)}`,
+        );
+
         setUserData(response.data);
+        localStorage.setItem("userData", JSON.stringify(response.data));
       } catch (error) {
         if (error.response?.status === 401 || error.response?.status === 403) {
-          console.warn("Unauthorized request. User might be logged out.");
+          console.warn(
+            "Session expired or unauthorised. User data unavailable.",
+          );
+          localStorage.removeItem("userData");
         } else {
-          console.error("Error fetching user data:", error.response?.data?.message || error.message);
+          console.error(
+            "Error fetching user data:",
+            error.response?.data?.message || error.message,
+          );
         }
       } finally {
         setLoading(false);
@@ -35,7 +54,7 @@ const useUserData = () => {
     };
 
     fetchUserData();
-  }, [currentUser, axiosSecure]);
+  }, [currentUser, jwtReady, axiosSecure]);
 
   return { userData, loading };
 };
