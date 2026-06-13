@@ -31,8 +31,10 @@ function AuthProvider({ children }) {
         // Logged out
         setJwtReady(false);
       } else if (!isLoggingIn.current) {
-        // Page reload / session restore — cookie is already in the browser
-        setJwtReady(true);
+        // Page reload / session restore — trust the stored token if it exists
+        if (localStorage.getItem("jwtToken")) {
+          setJwtReady(true);
+        }
       }
       // If isLoggingIn.current === true we are mid-login; jwtReady will be
       // set to true only after POST /auth/login succeeds inside login().
@@ -67,7 +69,7 @@ function AuthProvider({ children }) {
 
       if (user.emailVerified) {
         try {
-          await axios.post(
+          const response = await axios.post(
             `${BACKEND_URL}/auth/login`,
             {
               uid: user.uid,
@@ -76,6 +78,13 @@ function AuthProvider({ children }) {
             },
             { withCredentials: true },
           );
+          // Store the JWT in localStorage so it can be sent as an
+          // Authorization: Bearer header on every request. This is more
+          // reliable than cookies for cross-origin (Netlify → Render) calls
+          // because browsers increasingly block third-party cookies.
+          if (response.data.token) {
+            localStorage.setItem("jwtToken", response.data.token);
+          }
           setJwtReady(true);
         } catch (backendError) {
           // Backend login failed — roll back Firebase sign-in so the UI stays
@@ -94,6 +103,8 @@ function AuthProvider({ children }) {
   // Logout user
   const logout = () => {
     setJwtReady(false);
+    localStorage.removeItem("jwtToken");
+    localStorage.removeItem("userData");
     return signOut(auth);
   };
 

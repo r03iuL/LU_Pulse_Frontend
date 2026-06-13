@@ -5,8 +5,22 @@ import { useNavigate } from "react-router-dom";
 
 const axiosInstance = axios.create({
   baseURL: "https://lu-pulse-backend.onrender.com",
-  withCredentials: true, // Ensure cookies are sent in requests
+  withCredentials: true, // Keep for cookie fallback
 });
+
+// Attach the JWT from localStorage as Authorization: Bearer <token> on every
+// request. This is set up once at module level so it is always active,
+// regardless of which component is currently mounted.
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("jwtToken");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error),
+);
 
 const useAxiosSecure = () => {
   const { logout } = useAuth();
@@ -35,8 +49,12 @@ const useAxiosSecure = () => {
             await axios.post(
               "https://lu-pulse-backend.onrender.com/auth/logout",
               {},
-              { withCredentials: true }
+              { withCredentials: true },
             );
+
+            // Clear stored token and user data
+            localStorage.removeItem("jwtToken");
+            localStorage.removeItem("userData");
 
             // Ensure Firebase logout is also called
             await logout();
@@ -50,7 +68,7 @@ const useAxiosSecure = () => {
         }
 
         return Promise.reject(error);
-      }
+      },
     );
 
     return () => {
