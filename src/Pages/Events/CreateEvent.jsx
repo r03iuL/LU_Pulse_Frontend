@@ -44,7 +44,7 @@ const CreateEvent = () => {
     formData.append("image", event.image);
 
     try {
-      const response = await axiosSecure.post("/upload-image", formData, {
+      const response = await axiosSecure.post("/upload/upload-image", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
