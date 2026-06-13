@@ -40,7 +40,7 @@ const Login = () => {
 
       //API call to generate JWT token
       axiosSecure
-        .post("/login",  payload)
+        .post("/auth/login",  payload)
         .then((res) => console.log(res.data));
 
       // Redirect to another page after successful login

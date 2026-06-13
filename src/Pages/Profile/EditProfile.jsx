@@ -111,7 +111,7 @@ const EditProfile = () => {
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
-    <div className="max-w-lg mx-auto bg-white p-6 rounded-xl shadow-lg">
+    <div className="max-w-lg mx-auto bg-white p-10 my-10 rounded-xl shadow-lg">
       <h2 className="text-2xl font-semibold mb-4 text-center">Edit Profile</h2>
 
       {/* Full Name Field */}

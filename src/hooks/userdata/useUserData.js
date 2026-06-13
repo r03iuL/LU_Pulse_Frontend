@@ -16,13 +16,18 @@ const useUserData = () => {
 
     const fetchUserData = async () => {
       try {
-        // Delay fetching to ensure authentication is set
-        await new Promise((resolve) => setTimeout(resolve, 50000));
+        const cachedUserData = localStorage.getItem("userData");
+        if (cachedUserData) {
+          setUserData(JSON.parse(cachedUserData));
+          setLoading(false);
+          return;
+        }
 
         const response = await axiosSecure.get(`/users/${encodeURIComponent(currentUser.email)}`);
         
         // Store all user details
         setUserData(response.data);
+        localStorage.setItem("userData", JSON.stringify(response.data));
       } catch (error) {
         if (error.response?.status === 401 || error.response?.status === 403) {
           console.warn("Unauthorized request. User might be logged out.");

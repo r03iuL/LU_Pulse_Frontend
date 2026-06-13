@@ -97,7 +97,7 @@ const Notice = () => {
               currentNotices.map((notice) => (
                 <li key={notice._id} className="mb-4 border-b pb-4">
                   <Link
-                    to={`/notice/${notice._id}`}
+                    to={`/notices/${notice._id}`}
                     className="text-blue-600 hover:underline font-semibold"
                   >
                     {notice.title}

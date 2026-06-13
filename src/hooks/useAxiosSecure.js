@@ -32,7 +32,7 @@ const useAxiosSecure = () => {
             await new Promise((resolve) => setTimeout(resolve, 1500)); // add delay
             // Call backend logout API to clear cookies
             await axios.post(
-              "https://lu-pulse-backend.onrender.com/logout",
+              "https://lu-pulse-backend.onrender.com/auth/logout",
               {},
               { withCredentials: true }
             );
