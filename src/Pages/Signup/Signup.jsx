@@ -63,7 +63,7 @@ const Signup = () => {
         console.log("User Data:", userData);
 
         // Send the user data to the backend /users/signup endpoint
-        const response = await axiosSecure.post("/users/signup", userData);
+        const response = await axiosSecure.post("/auth/signup", userData);
 
         console.log("Signup Response:", response);
         const data = response.data;
@@ -71,7 +71,7 @@ const Signup = () => {
         // Call the signup method from AuthContext
         await signup(email, password);
 
-        if (data.message === "User registered successfully") {
+        if (data.message === "Registration successful. Welcome to LuPulse!") {
           const modal = document.getElementById("my_modal_2");
           modal.showModal();
           console.log("User Data from response:", data.user);
@@ -101,9 +101,13 @@ const Signup = () => {
     formData.append("image", imageFile);
 
     try {
-      const response = await axiosSecure.post("/upload/upload-image", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const response = await axiosSecure.post(
+        "/upload/upload-image",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        },
+      );
 
       const data = response.data;
 
@@ -330,7 +334,7 @@ const Signup = () => {
                 onBlur={(e) =>
                   validateConfirmPassword(
                     e.target.form.password.value,
-                    e.target.value
+                    e.target.value,
                   )
                 }
               />
